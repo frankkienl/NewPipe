@@ -9,5 +9,4 @@ class NPCarAppService : CarAppService() {
         NPSurface(carContext, lifecycle)
         return NPScreen(carContext)
     }
-
 }

@@ -2,7 +2,6 @@ package org.schabi.newpipe.car
 
 import android.graphics.Rect
 import android.view.Surface
-import android.view.SurfaceView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -10,7 +9,6 @@ import com.google.android.libraries.car.app.AppManager
 import com.google.android.libraries.car.app.CarContext
 import com.google.android.libraries.car.app.SurfaceContainer
 import com.google.android.libraries.car.app.SurfaceListener
-import java.lang.ref.WeakReference
 import java.util.*
 
 class NPSurface(val carContext: CarContext, lifecycle: Lifecycle) {
