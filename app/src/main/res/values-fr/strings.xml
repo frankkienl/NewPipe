@@ -41,8 +41,10 @@
     <string name="use_tor_title">Utiliser Tor</string>
     <string name="use_tor_summary">(Expérimental) Forcer la redirection du trafic de téléchargement via Tor pour plus de confidentialité (les flux vidéos ne sont pas encore pris en charge).</string>
     <string name="theme_title">Thème</string>
+    <string name="night_theme_title">Thème nuit</string>
     <string name="dark_theme_title">Sombre</string>
     <string name="light_theme_title">Clair</string>
+    <string name="black_theme_title">Noir</string>
     <string name="settings_category_appearance_title">Apparence</string>
     <string name="network_error">Erreur réseau</string>
     <string name="download_path_audio_title">Dossier de téléchargement audio</string>
@@ -53,7 +55,7 @@
     <string name="general_error">Erreur</string>
     <string name="parsing_error">Impossible d’analyser le site web</string>
     <string name="content_not_available">Contenu indisponible</string>
-    <string name="error_snackbar_message">Désolé, quelque chose s\'est mal passé.</string>
+    <string name="error_snackbar_message">Désolé, quelque chose s’est mal passé.</string>
     <string name="content">Contenu</string>
     <string name="show_age_restricted_content_title">Afficher le contenu avec limite d’âge</string>
     <string name="duration_live">En direct</string>
@@ -103,7 +105,6 @@
     <string name="no_available_dir">Veuillez définir ultérieurement un dossier de téléchargement dans les paramètres</string>
     <string name="could_not_load_image">Impossible de charger l’image</string>
     <string name="app_ui_crash">L’application a planté</string>
-    <string name="black_theme_title">Noir</string>
     <string name="all">Tout</string>
     <string name="channel">Chaîne</string>
     <string name="title_activity_recaptcha">Défi reCAPTCHA</string>
@@ -125,11 +126,12 @@
     <string name="show_higher_resolutions_title">Afficher des définitions plus élevées</string>
     <string name="show_higher_resolutions_summary">Seuls certains appareils peuvent lire les vidéos 2K et 4K</string>
     <string name="default_video_format_title">Format vidéo par défaut</string>
+    <string name="popup_remember_size_pos_title">Mémoriser les propriétés de la fenêtre flottante</string>
+    <string name="popup_remember_size_pos_summary">Mémorise les dernières taille et position de la fenêtre flottante</string>
     <string name="settings_category_popup_title">Flottant</string>
     <string name="filter">Filtre</string>
     <string name="refresh">Rafraîchir</string>
     <string name="clear">Effacer</string>
-    <string name="popup_resizing_indicator_title">Redimensionner</string>
     <string name="short_billion">G</string>
     <string name="use_external_video_player_summary">Le son peut être absent à certaines définitions</string>
     <string name="player_gesture_controls_summary">Utiliser des gestes pour contrôler la luminosité et le volume du lecteur</string>
@@ -261,8 +263,8 @@
     <string name="preferred_player_fetcher_notification_message">Chargement du contenu demandé</string>
     <string name="import_data_title">Importer la base de données</string>
     <string name="export_data_title">Exporter la base de données</string>
-    <string name="import_data_summary">Remplace votre historique et vos abonnements actuels</string>
-    <string name="export_data_summary">Exporte l’historique, les abonnements et les listes de lecture</string>
+    <string name="import_data_summary">Remplace votre historique, vos abonnements, vos listes de lecture et (en option) vos paramètres</string>
+    <string name="export_data_summary">Exporte l’historique, les abonnements, les listes de lecture et les paramètres</string>
     <string name="export_complete_toast">Exporté</string>
     <string name="import_complete_toast">Importé</string>
     <string name="no_valid_zip_file">Fichier ZIP non valide</string>
@@ -332,11 +334,14 @@
     <string name="previous_export">Exportation précédente</string>
     <string name="subscriptions_import_unsuccessful">Impossible d’importer les abonnements</string>
     <string name="subscriptions_export_unsuccessful">Impossible d’exporter les abonnements</string>
-    <string name="import_youtube_instructions">Veuillez importer vos abonnements YouTube en téléchargeant le fichier d’exportation.
-\n 
-\n1. Suivez ce lien : %1$s.
-\n2. Connectez-vous à votre compte.
-\n3. Un téléchargement va démarrer (celui du fichier d’exportation).</string>
+    <string name="import_youtube_instructions">Importez vos abonnements YouTube depuis Google Takeout :
+\n
+\n1. Suivez ce lien : %1$s
+\n2. Connectez-vous à votre compte
+\n3. Cliquez sur « Toutes les données YouTube sont incluses », puis sur « Tout désélectionner », puis sélectionnez uniquement « abonnements » et cliquez sur « OK »
+\n4. Cliquez sur « Étape suivante » et ensuite sur « Créer une exportation »
+\n5. Cliquez sur le bouton « Télécharger » après qu’il apparaisse et
+\n6. À partir du fichier ZIP téléchargé, extrayez le fichier JSON (généralement sous « YouTube et YouTube Music/subscriptions/subscriptions.json ») et importez-le ici.</string>
     <string name="import_soundcloud_instructions">Veuillez importer un profil SoundCloud en saisissant l’URL de votre profil ou votre identifiant.
 \n 
 \n1. Activez le « mode bureau » dans votre navigateur Web (le site n’est pas disponible pour les appareils mobiles).
@@ -547,7 +552,7 @@
     </plurals>
     <!-- feed -->
     <string name="fragment_feed_title">Nouveautés</string>
-    <string name="feed_groups_header_title">Groupes d\'abonnements</string>
+    <string name="feed_groups_header_title">Groupes de chaînes</string>
     <string name="feed_oldest_subscription_update">Dernière mise à jour du flux : %s</string>
     <string name="feed_subscription_not_loaded_count">Pas chargés : %d</string>
     <string name="feed_notification_loading">Chargement du flux…</string>
@@ -559,7 +564,7 @@
         <item quantity="other">%d sélectionnés</item>
     </plurals>
     <string name="feed_group_dialog_empty_name">Nom de groupe vide</string>
-    <string name="feed_group_dialog_delete_message">Voulez-vous supprimer ce groupe ?</string>
+    <string name="feed_group_dialog_delete_message">Voulez-vous supprimer ce groupe \?</string>
     <string name="feed_create_new_group_button_title">Nouveau</string>
     <string name="settings_category_feed_title">Flux</string>
     <string name="feed_update_threshold_title">Seuil de mise à jour du flux</string>
@@ -581,27 +586,29 @@
 \n
 \nDonc le choix se résume à ce que vous préférez : la rapidité ou des informations précises.</string>
     <string name="help">Aide</string>
-    <string name="content_not_supported">Ce contenu n\'est pas encore supporté par NewPipe.\n\nIl le sera peut-être dans une version future.</string>
+    <string name="content_not_supported">Ce contenu n’est pas encore pris en charge par NewPipe.
+\n
+\nNous espérons qu’il le sera dans une future version.</string>
     <string name="albums">Albums</string>
     <string name="infinite_videos">∞ vidéos</string>
     <string name="more_than_100_videos">100+ vidéos</string>
     <string name="artists">Artistes</string>
     <string name="songs">Chansons</string>
-    <string name="restricted_video">Cette vidéo dispose d\'une limite d\'âge.
+    <string name="restricted_video">Cette vidéo dispose d’une limite d’âge.
 \n
-\nActivez « %1$s » dans les paramètres si vous voulez la voir.</string>
+\nActivez « %1$s » dans les paramètres si vous voulez la voir.</string>
     <string name="remove_watched">Supprimer les vidéos vues</string>
     <string name="remove_watched_popup_yes_and_partially_watched_videos">Oui, et des vidéos partiellement regardées</string>
     <string name="remove_watched_popup_warning">Les vidéos qui ont été regardées avant et après avoir été ajoutées à la liste de lecture seront supprimées.
-\nVous êtes sûr \? C\'est irréversible !</string>
+\nÊtes-vous sûr \? C’est irréversible !</string>
     <string name="remove_watched_popup_title">Supprimer les vidéos regardées \?</string>
     <string name="detail_sub_channel_thumbnail_view_description">Miniature de la chaine</string>
     <string name="video_detail_by">De %s</string>
     <string name="channel_created_by">Créé par %s</string>
     <string name="show_original_time_ago_summary">Les textes originaux des services vont être visibles dans les items</string>
     <string name="show_original_time_ago_title">Afficher la date originelle sur les items</string>
-    <string name="youtube_restricted_mode_enabled_title">Activer le « Mode restreint » de YouTube</string>
-    <string name="feed_group_show_only_ungrouped_subscriptions">Afficher les abonnements sans groupes uniquement</string>
+    <string name="youtube_restricted_mode_enabled_title">Activer le « Mode restreint » de YouTube</string>
+    <string name="feed_group_show_only_ungrouped_subscriptions">Afficher uniquement les abonnements non groupés</string>
     <string name="playlist_page_summary">Page des listes de lecture</string>
     <string name="no_playlist_bookmarked_yet">Aucune liste de lecture encore enregistrée</string>
     <string name="select_a_playlist">Sélectionner une liste de lecture</string>
@@ -609,12 +616,12 @@
     <string name="error_report_open_issue_button_text">Signaler sur GitHub</string>
     <string name="copy_for_github">Copier le rapport formaté</string>
     <string name="search_showing_result_for">Affichage des résultats pour : %s</string>
-    <string name="clear_queue_confirmation_summary">Changer d\'un lecteur à un autre pourrait remplacer votre liste de lecture</string>
+    <string name="clear_queue_confirmation_summary">Basculer d’un lecteur à un autre peut remplacer votre liste de lecture</string>
     <string name="never">Jamais</string>
     <string name="wifi_only">Uniquement en Wi-Fi</string>
     <string name="autoplay_summary">Démarrer la lecture automatiquement — %s</string>
     <string name="title_activity_play_queue">Liste de lecture</string>
-    <string name="unsupported_url_dialog_message">Impossible de reconnaitre l\'URL fourni. Voulez vous l\'ouvrir avec une autre appli \?</string>
+    <string name="unsupported_url_dialog_message">Impossible de reconnaitre l’URL fournie. Voulez-vous l’ouvrir avec une autre application \?</string>
     <string name="auto_queue_toggle">Ajouter automatiquement à la liste de lecture</string>
     <string name="clear_queue_confirmation_description">La liste de lecture du lecteur actif sera remplacée</string>
     <string name="clear_queue_confirmation_title">Confirmer av. de suppr. la liste de lecture</string>
@@ -624,20 +631,46 @@
     <string name="notification_action_shuffle">Lire aléatoirement</string>
     <string name="notification_action_repeat">Répéter</string>
     <string name="notification_actions_at_most_three">Vous pouvez sélectionner au maximum trois actions à faire figurer dans la notification compacte !</string>
-    <string name="notification_actions_summary">Modifiez chaque action de notification ci-dessous en appuyant dessus. Sélectionnez jusqu\'à trois d\'entre elles pour les faire apparaitre dans la notification compacte en utilisant les cases à cocher à droite.</string>
-    <string name="notification_action_4_title">Cinquième bouton d\'action</string>
-    <string name="notification_action_3_title">Quatrième bouton d\'action</string>
-    <string name="notification_action_2_title">Troisième bouton d\'action</string>
-    <string name="notification_action_1_title">Deuxième bouton d\'action</string>
-    <string name="notification_action_0_title">Premier bouton d\'action</string>
-    <string name="notification_scale_to_square_image_summary">Mettre à l\'échelle la miniature de la vidéo affichée dans la notification du format 16:9 au format 1:1 (peut provoquer des déformations)</string>
+    <string name="notification_actions_summary">Modifiez chaque action de notification ci-dessous en appuyant dessus. Sélectionnez jusqu’à trois d’entre elles pour les faire apparaitre dans la notification compacte en utilisant les cases à cocher à droite.</string>
+    <string name="notification_action_4_title">Cinquième bouton d’action</string>
+    <string name="notification_action_3_title">Quatrième bouton d’action</string>
+    <string name="notification_action_2_title">Troisième bouton d’action</string>
+    <string name="notification_action_1_title">Deuxième bouton d’action</string>
+    <string name="notification_action_0_title">Premier bouton d’action</string>
+    <string name="notification_scale_to_square_image_summary">Scale la miniature de la vidéo affichée dans la notification du rapport de forme 16:9 au 1:1 (peut provoquer des déformations)</string>
     <string name="notification_scale_to_square_image_title">Dimensionner la miniature au format 1:1</string>
     <string name="show_memory_leaks">Afficher les fuites de mémoire</string>
-    <string name="enqueued">Ajouté à la file d\'attente</string>
-    <string name="enqueue_stream">Ajouter à la file d\'attente</string>
+    <string name="enqueued">Ajouté à la file d’attente</string>
+    <string name="enqueue_stream">Ajouter à la file d’attente</string>
     <string name="clear_cookie_summary">Effacer les cookies que NewPipe garde lorsque vous résolvez un reCAPTCHA</string>
     <string name="recaptcha_cookies_cleared">Les cookies reCAPTCHA ont été effacés</string>
     <string name="clear_cookie_title">Effacer les cookies reCAPTCHA</string>
-    <string name="youtube_restricted_mode_enabled_summary">YouTube dispose d\'un « Mode restreint » qui cache le contenu potentiellement inapproprié.</string>
-    <string name="show_age_restricted_content_summary">Le contenu de cette émission n\'est peut-être pas approprié pour les enfants à cause d\'une limite d\'âge (18 +).</string>
+    <string name="youtube_restricted_mode_enabled_summary">YouTube dispose d’un « Mode restreint » qui cache le contenu potentiellement inapproprié</string>
+    <string name="show_age_restricted_content_summary">Affiche du contenu probablement inapproprié pour les enfants</string>
+    <string name="notification_colorize_title">Notification colorée</string>
+    <string name="notification_colorize_summary">Demander à Android de personnaliser la couleur de la notification en fonction de la couleur principale de la miniature (noter que cela n’est pas disponible sur tous les appareils)</string>
+    <string name="show_thumbnail_title">Afficher la miniature</string>
+    <string name="show_thumbnail_summary">Utiliser la miniature pour l\'arrière-plan de l’écran de verrouillage et les notifications</string>
+    <string name="open_with">Ouvrir avec</string>
+    <string name="recent">Récent</string>
+    <string name="msg_calculating_hash">Calcul du hachage</string>
+    <string name="hash_channel_description">Notifications pour la progression du hachage vidéo</string>
+    <string name="hash_channel_name">Notification de hachage vidéo</string>
+    <string name="show_meta_info_summary">Désactivez cette option pour masquer les zones de méta-informations contenant des informations supplémentaires sur le créateur du flux, le contenu du flux ou une demande de recherche.</string>
+    <string name="show_meta_info_title">Afficher les méta-infos</string>
+    <string name="no_app_to_open_intent">Aucune application sur votre appareil ne peut ouvrir ceci</string>
+    <string name="chapters">Chapitres</string>
+    <string name="description_tab_description">Description</string>
+    <string name="related_streams_tab_description">Flux associés</string>
+    <string name="comments_tab_description">Commentaires</string>
+    <string name="show_description_summary">Désactiver pour masquer la description de la vidéo et les informations supplémentaires</string>
+    <string name="show_description_title">Afficher la description</string>
+    <string name="crash_the_app">Faire planter l\'application</string>
+    <string name="georestricted_content">Ce contenu n\'est pas disponible dans votre pays.</string>
+    <string name="paid_content">Ce contenu n\'est disponible que pour les abonnés, il ne peut donc pas être diffusé en continu ni téléchargé par NewPipe.</string>
+    <string name="youtube_music_premium_content">Cette vidéo n\'est disponible que pour les membres de YouTube Music Premium, elle ne peut donc pas être diffusée en continu ni téléchargée par NewPipe.</string>
+    <string name="private_content">Ce contenu est privé, il ne peut donc pas être diffusé en continu ni téléchargé par NewPipe.</string>
+    <string name="auto_device_theme_title">Automatique (thème de l\'appareil)</string>
+    <string name="night_theme_summary">Choisissez votre thème nuit favori — %s</string>
+    <string name="select_night_theme_toast">Vous pouvez chosir votre thème nuit favori</string>
 </resources>

@@ -1,9 +1,10 @@
 package org.schabi.newpipe.info_list.holder;
 
-import androidx.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.preference.PreferenceManager;
 
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.InfoItem;
@@ -95,7 +96,7 @@ public class StreamInfoItemHolder extends StreamMiniInfoItemHolder {
     private String getFormattedRelativeUploadDate(final StreamInfoItem infoItem) {
         if (infoItem.getUploadDate() != null) {
             String formattedRelativeTime = Localization
-                    .relativeTime(infoItem.getUploadDate().date());
+                    .relativeTime(infoItem.getUploadDate().offsetDateTime());
 
             if (DEBUG && PreferenceManager.getDefaultSharedPreferences(itemBuilder.getContext())
                     .getBoolean(itemBuilder.getContext()

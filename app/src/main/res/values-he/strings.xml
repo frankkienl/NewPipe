@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_bg_subtitle">יש לגעת ב־„חיפוש” כדי להתחיל
+    <string name="main_bg_subtitle">יש לגעת בכפתור „חיפוש” כדי להתחיל
 \n</string>
     <string name="view_count_text">%1$s צפיות</string>
     <string name="upload_date_text">פורסם ב־%1$s</string>
@@ -46,6 +46,8 @@
     <string name="light_theme_title">בהיר</string>
     <string name="dark_theme_title">כהה</string>
     <string name="black_theme_title">שחור</string>
+    <string name="popup_remember_size_pos_title">שמירת מאפייני החלון הצף</string>
+    <string name="popup_remember_size_pos_summary">שמירת המיקום והגודל האחרונים של החלון הצף</string>
     <string name="player_gesture_controls_title">מחוות מגע לשליטה בנגן</string>
     <string name="player_gesture_controls_summary">שימוש במחוות כדי לשלוט בבהירות ובעצמת השמע של הנגן</string>
     <string name="show_search_suggestions_title">הצעות חיפוש</string>
@@ -74,7 +76,6 @@
     <string name="filter">מסנן</string>
     <string name="refresh">רענון</string>
     <string name="clear">פינוי</string>
-    <string name="popup_resizing_indicator_title">שינוי גודל</string>
     <string name="general_error">שגיאה</string>
     <string name="network_error">שגיאת רשת</string>
     <string name="could_not_load_thumbnails">אין אפשרות לטעון את כל התמונות הממוזערות</string>
@@ -266,7 +267,7 @@
     <string name="thumbnail_cache_wipe_complete_notice">תמונות מטמון נמחקו</string>
     <string name="metadata_cache_wipe_title">ניקוי מטמון נתוני העל</string>
     <string name="metadata_cache_wipe_complete_notice">מטמון נתוני העל התרוקן</string>
-    <string name="export_data_summary">ייצוא היסטוריה, מינויים ורשימות נגינה</string>
+    <string name="export_data_summary">ייצוא היסטוריה, מינויים, רשימות נגינה והגדרות</string>
     <string name="clear_views_history_title">מחיקת היסטוריית הצפייה</string>
     <string name="watch_history_deleted">היסטוריית הצפייה נמחקה.</string>
     <string name="clear_search_history_title">מחיקת היסטוריית החיפוש</string>
@@ -317,10 +318,13 @@
     <string name="subscriptions_import_unsuccessful">לא ניתן לייבא את המינויים</string>
     <string name="subscriptions_export_unsuccessful">לא ניתן לייצא את המינויים</string>
     <string name="import_youtube_instructions">כדי לייבא את רשימת המינויים שלך מ־YouTube עליך להוריד את קובץ הייצוא:
-\n 
+\n
 \n1. לעבור לכתובת הזו: %1$s
 \n2. להיכנס אם נתבקשת
-\n3. ההורדה אמורה להתחיל (זה קובץ הייצוא)</string>
+\n3. ללחוץ על „All data included”, ואז על „Deselect all”, לאחר מכן לבחור רק את „subscriptions” וללחוץ על „OK”
+\n4. ללחוץ על „Next step” ואז על „Create export”
+\n5. ללחוץ על כפתור ה־„Download” כשהוא מופיע ואז
+\n6. לחלץ את קובץ ה־‎.json מתוך ה־zip (בדרך כלל תחת „YouTube and YouTube Music/subscriptions/subscriptions.json”) ולייבא אותו כאן.</string>
     <string name="playback_tempo">קצב</string>
     <string name="use_inexact_seek_title">שימוש בחיפוש מהיר ולא מדויק</string>
     <string name="use_inexact_seek_summary">חיפוש גס מאפשר לנגן לחפש נקודת זמן מהר יותר, ברמת דיוק נמוכה יותר. חיפוש של 5, 15 או 25 שניות לא עובד עם ההגדרה הזאת.</string>
@@ -331,7 +335,7 @@
     <string name="auto_queue_summary">להמשיך תור נגינה סופית (בלתי מחזורית) על ידי הוספת תזרים קשור</string>
     <string name="toggle_orientation">החלפת כיווניות</string>
     <string name="switch_to_main">העברה לראשי</string>
-    <string name="import_data_summary">משכתב את ההיסטוריה והמינויים הנוכחיים שלך</string>
+    <string name="import_data_summary">משכתב את ההיסטוריה, המינויים ו(אולי גם) את ההגדרות הנוכחיים שלך</string>
     <string name="clear_views_history_summary">מחיקת היסטוריית התזרימים שהתנגנו ומיקומי הנגינה</string>
     <string name="channels">ערוצים</string>
     <string name="playlists">רשימות נגינה</string>
@@ -658,6 +662,32 @@
     <string name="clear_cookie_summary">לנקות עוגיות שנשמרות על ידי NewPipe בעת פתרון reCAPTCHA</string>
     <string name="recaptcha_cookies_cleared">העוגיות של ה־reCAPTCHA נמחקו</string>
     <string name="clear_cookie_title">פינוי עוגיות reCAPTCHA</string>
-    <string name="youtube_restricted_mode_enabled_summary">פלטפורמת YouTube מספקת „מצב מוגבל” שמסתיר תוכן שעשוי להתאים למבוגרים בלבד.</string>
-    <string name="show_age_restricted_content_summary">הצגת תוכן שעלול להיות בלתי הולם לילדים עקב מגבלת גיל (כגון 18+).</string>
+    <string name="youtube_restricted_mode_enabled_summary">פלטפורמת YouTube מספקת „מצב מוגבל” שמסתיר תוכן שעשוי להתאים למבוגרים בלבד</string>
+    <string name="show_age_restricted_content_summary">הצגת תוכן שעלול להיות בלתי הולם לילדים עקב מגבלת גיל (כגון 18+)</string>
+    <string name="notification_colorize_summary">לאפשר ל־Android להתאים את צבע ההתראה בהתאם לצבע העיקרי של התמונה הממוזערת (לא זמין בכל המכשירים)</string>
+    <string name="notification_colorize_title">צביעת ההתראה</string>
+    <string name="show_thumbnail_summary">להשתמש בתמונה ממוזערת גם כרקע מסך הנעילה וגם בהתראות</string>
+    <string name="show_thumbnail_title">הצגת תמונה ממוזערת</string>
+    <string name="msg_calculating_hash">הגיבוב</string>
+    <string name="hash_channel_description">התראות על תהליכי גיבוב</string>
+    <string name="hash_channel_name">התראת גיבוב סרטון</string>
+    <string name="recent">אחרונים</string>
+    <string name="show_meta_info_summary">לכבות את התיבות שמציגות את המידע על יוצרי התזרים, תוכן התזרים או בקשת חיפוש.</string>
+    <string name="show_meta_info_title">הצגת מידע על</string>
+    <string name="chapters">פרקים</string>
+    <string name="description_tab_description">תיאור</string>
+    <string name="related_streams_tab_description">תזרימים קשורים</string>
+    <string name="comments_tab_description">הערות</string>
+    <string name="show_description_summary">יש לכבות כדי להסתיר תיאורי סרטונים ומידע נוסף</string>
+    <string name="show_description_title">הצגת תיאור</string>
+    <string name="open_with">פתיחה באמצעות</string>
+    <string name="no_app_to_open_intent">אין יישומון על המכשיר שלך שיכול לפתוח את זה</string>
+    <string name="crash_the_app">להקריס את היישומון</string>
+    <string name="paid_content">תוכן זה זמין רק למשתמשים ששילמו, לכן לא ניתן להזרים או להוריד אותו עם NewPipe.</string>
+    <string name="youtube_music_premium_content">סרטון זה זמין רק למנויי YouTube Music Premium, לכן לא ניתן להזרים או להוריד אותו עם NewPipe.</string>
+    <string name="private_content">זה תוכן פרטי, לכן לא ניתן להזרים או להוריד אותו עם NewPipe.</string>
+    <string name="soundcloud_go_plus_content">רצועה זו של SoundCloud Go+‎ מוגבלת, לפחות במדינה שלך, לכן לא ניתן להזרים או להוריד אותה עם NewPipe.</string>
+    <string name="georestricted_content">תוכן זה אינו זמין במדינה שלך.</string>
+    <string name="restricted_video_no_stream">הצפייה בסרטון הזה מוגבלת בגיל.
+\nעקב מדיניות חדשה ב־YouTube בנוגע לסרטונים מוגבלי גיל, ל־NewPipe אין אפשרות לגשת לתזרימי הווידאו של השירות ולכן אין אפשרות לנגן אותם.</string>
 </resources>

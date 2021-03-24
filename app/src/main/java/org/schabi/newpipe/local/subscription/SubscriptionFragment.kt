@@ -26,22 +26,19 @@ import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.Section
-import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import com.xwray.groupie.viewbinding.GroupieViewHolder
 import icepick.State
-import io.reactivex.disposables.CompositeDisposable
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import kotlin.math.floor
-import kotlin.math.max
-import kotlinx.android.synthetic.main.dialog_title.view.itemAdditionalDetails
-import kotlinx.android.synthetic.main.dialog_title.view.itemTitleView
-import kotlinx.android.synthetic.main.fragment_subscription.items_list
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import org.schabi.newpipe.R
 import org.schabi.newpipe.database.feed.model.FeedGroupEntity
+import org.schabi.newpipe.databinding.DialogTitleBinding
+import org.schabi.newpipe.databinding.FeedItemCarouselBinding
+import org.schabi.newpipe.databinding.FragmentSubscriptionBinding
+import org.schabi.newpipe.error.ErrorInfo
+import org.schabi.newpipe.error.UserAction
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem
 import org.schabi.newpipe.fragments.BaseStateFragment
+import org.schabi.newpipe.ktx.animate
 import org.schabi.newpipe.local.subscription.SubscriptionViewModel.SubscriptionState
 import org.schabi.newpipe.local.subscription.dialog.FeedGroupDialog
 import org.schabi.newpipe.local.subscription.dialog.FeedGroupReorderDialog
@@ -61,22 +58,29 @@ import org.schabi.newpipe.local.subscription.services.SubscriptionsImportService
 import org.schabi.newpipe.local.subscription.services.SubscriptionsImportService.KEY_MODE
 import org.schabi.newpipe.local.subscription.services.SubscriptionsImportService.KEY_VALUE
 import org.schabi.newpipe.local.subscription.services.SubscriptionsImportService.PREVIOUS_EXPORT_MODE
-import org.schabi.newpipe.report.UserAction
-import org.schabi.newpipe.util.AnimationUtils.animateView
 import org.schabi.newpipe.util.FilePickerActivityHelper
 import org.schabi.newpipe.util.NavigationHelper
 import org.schabi.newpipe.util.OnClickGesture
 import org.schabi.newpipe.util.ShareUtils
 import org.schabi.newpipe.util.ThemeHelper
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import kotlin.math.floor
+import kotlin.math.max
 
 class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
+    private var _binding: FragmentSubscriptionBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var viewModel: SubscriptionViewModel
     private lateinit var subscriptionManager: SubscriptionManager
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     private var subscriptionBroadcastReceiver: BroadcastReceiver? = null
 
-    private val groupAdapter = GroupAdapter<GroupieViewHolder>()
+    private val groupAdapter = GroupAdapter<GroupieViewHolder<FeedItemCarouselBinding>>()
     private val feedGroupsSection = Section()
     private var feedGroupsCarousel: FeedGroupCarouselItem? = null
     private lateinit var importExportItem: FeedImportExportItem
@@ -129,7 +133,7 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
 
     override fun onPause() {
         super.onPause()
-        itemsListState = items_list.layoutManager?.onSaveInstanceState()
+        itemsListState = binding.itemsList.layoutManager?.onSaveInstanceState()
         feedGroupsListState = feedGroupsCarousel?.onSaveInstanceState()
         importExportItemExpandedState = importExportItem.isExpanded
 
@@ -169,7 +173,7 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
         filters.addAction(IMPORT_COMPLETE_ACTION)
         subscriptionBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                items_list?.post {
+                _binding?.itemsList?.post {
                     importExportItem.isExpanded = false
                     importExportItem.notifyChanged(FeedImportExportItem.REFRESH_EXPANDED_STATUS)
                 }
@@ -208,14 +212,19 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
                 if (!exportFile.parentFile.canWrite() || !exportFile.parentFile.canRead()) {
                     Toast.makeText(activity, R.string.invalid_directory, Toast.LENGTH_SHORT).show()
                 } else {
-                    activity.startService(Intent(activity, SubscriptionsExportService::class.java)
-                            .putExtra(KEY_FILE_PATH, exportFile.absolutePath))
+                    activity.startService(
+                        Intent(activity, SubscriptionsExportService::class.java)
+                            .putExtra(KEY_FILE_PATH, exportFile.absolutePath)
+                    )
                 }
             } else if (requestCode == REQUEST_IMPORT_CODE) {
                 val path = Utils.getFileForUri(data.data!!).absolutePath
-                ImportConfirmationDialog.show(this, Intent(activity, SubscriptionsImportService::class.java)
+                ImportConfirmationDialog.show(
+                    this,
+                    Intent(activity, SubscriptionsImportService::class.java)
                         .putExtra(KEY_MODE, PREVIOUS_EXPORT_MODE)
-                        .putExtra(KEY_VALUE, path))
+                        .putExtra(KEY_VALUE, path)
+                )
             }
         }
     }
@@ -226,7 +235,7 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
 
     private fun setupInitialLayout() {
         Section().apply {
-            val carouselAdapter = GroupAdapter<GroupieViewHolder>()
+            val carouselAdapter = GroupAdapter<GroupieViewHolder<FeedItemCarouselBinding>>()
 
             carouselAdapter.add(FeedGroupCardItem(-1, getString(R.string.all), FeedGroupIcon.RSS))
             carouselAdapter.add(feedGroupsSection)
@@ -247,9 +256,9 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
 
             feedGroupsCarousel = FeedGroupCarouselItem(requireContext(), carouselAdapter)
             feedGroupsSortMenuItem = HeaderWithMenuItem(
-                    getString(R.string.feed_groups_header_title),
-                    ThemeHelper.resolveResourceIdFromAttr(requireContext(), R.attr.ic_sort),
-                    menuItemOnClickListener = ::openReorderDialog
+                getString(R.string.feed_groups_header_title),
+                ThemeHelper.resolveResourceIdFromAttr(requireContext(), R.attr.ic_sort),
+                menuItemOnClickListener = ::openReorderDialog
             )
             add(Section(feedGroupsSortMenuItem, listOf(feedGroupsCarousel)))
 
@@ -260,57 +269,58 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
         subscriptionsSection.setHideWhenEmpty(true)
 
         importExportItem = FeedImportExportItem(
-                { onImportPreviousSelected() },
-                { onImportFromServiceSelected(it) },
-                { onExportSelected() },
-                importExportItemExpandedState ?: false)
+            { onImportPreviousSelected() },
+            { onImportFromServiceSelected(it) },
+            { onExportSelected() },
+            importExportItemExpandedState ?: false
+        )
         groupAdapter.add(Section(importExportItem, listOf(subscriptionsSection)))
     }
 
     override fun initViews(rootView: View, savedInstanceState: Bundle?) {
         super.initViews(rootView, savedInstanceState)
+        _binding = FragmentSubscriptionBinding.bind(rootView)
 
         val shouldUseGridLayout = shouldUseGridLayout()
         groupAdapter.spanCount = if (shouldUseGridLayout) getGridSpanCount() else 1
-        items_list.layoutManager = GridLayoutManager(requireContext(), groupAdapter.spanCount).apply {
+        binding.itemsList.layoutManager = GridLayoutManager(requireContext(), groupAdapter.spanCount).apply {
             spanSizeLookup = groupAdapter.spanSizeLookup
         }
-        items_list.adapter = groupAdapter
+        binding.itemsList.adapter = groupAdapter
 
         viewModel = ViewModelProvider(this).get(SubscriptionViewModel::class.java)
-        viewModel.stateLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer { it?.let(this::handleResult) })
-        viewModel.feedGroupsLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer { it?.let(this::handleFeedGroups) })
+        viewModel.stateLiveData.observe(viewLifecycleOwner) { it?.let(this::handleResult) }
+        viewModel.feedGroupsLiveData.observe(viewLifecycleOwner) { it?.let(this::handleFeedGroups) }
     }
 
     private fun showLongTapDialog(selectedItem: ChannelInfoItem) {
-        val commands = arrayOf(
-                getString(R.string.share),
-                getString(R.string.unsubscribe)
-        )
+        val commands = arrayOf(getString(R.string.share), getString(R.string.unsubscribe))
 
         val actions = DialogInterface.OnClickListener { _, i ->
             when (i) {
-                0 -> ShareUtils.shareUrl(requireContext(), selectedItem.name, selectedItem.url)
+                0 -> ShareUtils.shareText(requireContext(), selectedItem.name, selectedItem.url)
                 1 -> deleteChannel(selectedItem)
             }
         }
 
-        val bannerView = View.inflate(requireContext(), R.layout.dialog_title, null)
-        bannerView.isSelected = true
-        bannerView.itemTitleView.text = selectedItem.name
-        bannerView.itemAdditionalDetails.visibility = View.GONE
+        val dialogTitleBinding = DialogTitleBinding.inflate(LayoutInflater.from(requireContext()))
+        dialogTitleBinding.root.isSelected = true
+        dialogTitleBinding.itemTitleView.text = selectedItem.name
+        dialogTitleBinding.itemAdditionalDetails.visibility = View.GONE
 
         AlertDialog.Builder(requireContext())
-                .setCustomTitle(bannerView)
-                .setItems(commands, actions)
-                .create()
-                .show()
+            .setCustomTitle(dialogTitleBinding.root)
+            .setItems(commands, actions)
+            .create()
+            .show()
     }
 
     private fun deleteChannel(selectedItem: ChannelInfoItem) {
-        disposables.add(subscriptionManager.deleteSubscription(selectedItem.serviceId, selectedItem.url).subscribe {
-            Toast.makeText(requireContext(), getString(R.string.channel_unsubscribed), Toast.LENGTH_SHORT).show()
-        })
+        disposables.add(
+            subscriptionManager.deleteSubscription(selectedItem.serviceId, selectedItem.url).subscribe {
+                Toast.makeText(requireContext(), getString(R.string.channel_unsubscribed), Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     override fun doInitialLoadLogic() = Unit
@@ -332,8 +342,10 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
     }
 
     private val listenerChannelItem = object : OnClickGesture<ChannelInfoItem>() {
-        override fun selected(selectedItem: ChannelInfoItem) = NavigationHelper.openChannelFragment(fm,
-                selectedItem.serviceId, selectedItem.url, selectedItem.name)
+        override fun selected(selectedItem: ChannelInfoItem) = NavigationHelper.openChannelFragment(
+            fm,
+            selectedItem.serviceId, selectedItem.url, selectedItem.name
+        )
 
         override fun held(selectedItem: ChannelInfoItem) = showLongTapDialog(selectedItem)
     }
@@ -358,19 +370,21 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
                 subscriptionsSection.setHideWhenEmpty(false)
 
                 if (result.subscriptions.isEmpty() && importExportItemExpandedState == null) {
-                    items_list.post {
+                    binding.itemsList.post {
                         importExportItem.isExpanded = true
                         importExportItem.notifyChanged(FeedImportExportItem.REFRESH_EXPANDED_STATUS)
                     }
                 }
 
                 if (itemsListState != null) {
-                    items_list.layoutManager?.onRestoreInstanceState(itemsListState)
+                    binding.itemsList.layoutManager?.onRestoreInstanceState(itemsListState)
                     itemsListState = null
                 }
             }
             is SubscriptionState.ErrorState -> {
-                result.error?.let { onError(result.error) }
+                result.error?.let {
+                    showError(ErrorInfo(result.error, UserAction.SOMETHING_ELSE, "Subscriptions"))
+                }
             }
         }
     }
@@ -384,7 +398,7 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
         }
 
         feedGroupsSortMenuItem.showMenuItem = groups.size > 1
-        items_list.post { feedGroupsSortMenuItem.notifyChanged(PAYLOAD_UPDATE_VISIBILITY_MENU_ITEM) }
+        binding.itemsList.post { feedGroupsSortMenuItem.notifyChanged(PAYLOAD_UPDATE_VISIBILITY_MENU_ITEM) }
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -393,23 +407,12 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
 
     override fun showLoading() {
         super.showLoading()
-        animateView(items_list, false, 100)
+        binding.itemsList.animate(false, 100)
     }
 
     override fun hideLoading() {
         super.hideLoading()
-        animateView(items_list, true, 200)
-    }
-
-    // /////////////////////////////////////////////////////////////////////////
-    // Fragment Error Handling
-    // /////////////////////////////////////////////////////////////////////////
-
-    override fun onError(exception: Throwable): Boolean {
-        if (super.onError(exception)) return true
-
-        onUnrecoverableError(exception, UserAction.SOMETHING_ELSE, "none", "Subscriptions", R.string.general_error)
-        return true
+        binding.itemsList.animate(true, 200)
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -420,14 +423,13 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
 
     private fun shouldUseGridLayout(): Boolean {
         val listMode = PreferenceManager.getDefaultSharedPreferences(requireContext())
-                .getString(getString(R.string.list_view_mode_key), getString(R.string.list_view_mode_value))
+            .getString(getString(R.string.list_view_mode_key), getString(R.string.list_view_mode_value))
 
         return when (listMode) {
             getString(R.string.list_view_mode_auto_key) -> {
                 val configuration = resources.configuration
-
-                (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-                        configuration.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE))
+                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                    configuration.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE)
             }
             getString(R.string.list_view_mode_grid_key) -> true
             else -> false

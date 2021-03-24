@@ -54,6 +54,8 @@
     <string name="light_theme_title">Kirkas</string>
     <string name="dark_theme_title">Tumma</string>
     <string name="black_theme_title">Musta</string>
+    <string name="popup_remember_size_pos_title">Muista ponnahdusikkunan ominaisuudet</string>
+    <string name="popup_remember_size_pos_summary">Muista ponnahdusikkunan viimeisin koko ja sijainti</string>
     <string name="player_gesture_controls_title">Soittimen eleohjaus</string>
     <string name="player_gesture_controls_summary">Käytä eleitä ohjataksesi soittimen kirkkautta ja äänentasoa</string>
     <string name="show_search_suggestions_title">Hakuehdotukset</string>
@@ -91,7 +93,6 @@
     <string name="filter">Suodata</string>
     <string name="refresh">Päivitä</string>
     <string name="clear">Pyyhi</string>
-    <string name="popup_resizing_indicator_title">Muutetaan kokoa</string>
     <string name="best_resolution">Paras resoluutio</string>
     <string name="undo">Peru</string>
     <string name="notification_channel_name">NewPipe Ilmoitus</string>
@@ -154,7 +155,7 @@
     <string name="pause">Tauota</string>
     <string name="view">Toista</string>
     <string name="delete">Poista</string>
-    <string name="checksum">Tarkistus-suma</string>
+    <string name="checksum">Tarkistussumma</string>
     <string name="add">Uusi tehtävä</string>
     <string name="finish">OK</string>
     <string name="msg_name">Tiedostonimi</string>
@@ -270,8 +271,8 @@
     <string name="switch_to_main">Vaihda normaalitoistoon</string>
     <string name="import_data_title">Tuo tietokanta</string>
     <string name="export_data_title">Vie tietokanta</string>
-    <string name="import_data_summary">Kirjoittaa yli tämänhetkisen historian ja tilaukset</string>
-    <string name="export_data_summary">Vie historia, tilaukset tai soittolistat</string>
+    <string name="import_data_summary">Ylikirjoittaa tämänhetkisen historian, tilaukset, soittolistat ja (vaihtoehtoisesti) asetukset</string>
+    <string name="export_data_summary">Vie historia, tilaukset, soittolistat ja asetukset</string>
     <string name="clear_views_history_title">Poista katseluhistoria</string>
     <string name="clear_views_history_summary">Poistaa toistohistorian ja toistokohdat</string>
     <string name="delete_view_history_alert">Poista koko katseluhistoria\?</string>
@@ -358,11 +359,14 @@
     <string name="previous_export">Edellinen vienti</string>
     <string name="subscriptions_import_unsuccessful">Tilauksia ei voitu tuoda</string>
     <string name="subscriptions_export_unsuccessful">Tilauksia ei voitu viedä</string>
-    <string name="import_youtube_instructions">Tuo youtube-tilaukset lataamalla ensin tilauslistatiedostosi:
+    <string name="import_youtube_instructions">Tuo YouTube-tilaukset Google Takeoutista:
 \n
 \n1. Mene osoitteeseen: %1$s
-\n2. Kirjaudu sisään kun niin vaaditaan
-\n3. Latauksen pitäisi alkaa (se on se tiedosto)</string>
+\n2. Kirjaudu sisään pyydettäessä
+\n3. Klikkaa \"Kaikki Youtube-data valittuna\", sitten \"Poista kaikki valinnat\", sitten ainoastaan \"tilaukset\" ja klikkaa \"OK\"
+\n4. Klikkaa \"Seuraava vaihe\" ja \"Luo vienti\"
+\n5. Klikkaa \"Lataa\" tämän ilmestyessä
+\n6. Ladatusta takeoutin zip-tiedostosta pura json-tiedosto (yleensä sijainnissa \"Youtube ja Youtube Musiikki/tilaukset/tilaukset.json\" ja tuo se tänne</string>
     <string name="import_soundcloud_instructions">Tuo SoundCloud-profiili kirjoittamalla joko osoite tai ID:si:
 \n
 \n1. Laita päälle työpöytämoodi selaimessasi (tai käytä tietokonetta, tämä sivu ei toimi mobiilisivuna)
@@ -485,9 +489,9 @@
 \n• Koko tilatun kanavan lataaminen, mikä on hidasta, mutta lataa syötteen kokonaisuudessaan.
 \n• Erityisen palvelu-endpointin käyttö, mikä on nopeaa, mutta yleensä ei lataa syötettä kokonaisuudessaan.
 \n
-\nNäiden kahden välinen ero on, että nopean lataamista tiedoista yleensä puuttuu esim. sisällön kesto tai tyyppi (ei voi erotella livevideoita ja tavallisia) tai se ei lataa kaikkea sisältöä.
+\nNäiden kahden välinen ero on, että nopean tavan lataamista tiedoista yleensä puuttuu esim. sisällön kesto tai tyyppi (ei voi erotella livevideoita ja tavallisia) tai se ei lataa kaikkea sisältöä.
 \n
-\nYouTuve on esimerkki palvelusta, joka tarjoaa nopean tavan RSS-syötteen avulla.
+\nYouTube on esimerkki palvelusta, joka tarjoaa nopean tavan RSS-syötteen avulla.
 \n
 \nValinta riippuu siitä, mitä halutaan: nopeutta vai tarkkoja tietoja.</string>
     <string name="default_kiosk_page_summary">Oletuskioski</string>
@@ -638,6 +642,22 @@
     <string name="clear_cookie_summary">Poista evästeet, jotka NewPipe tallentaa, kun ratkaiset reCAPTCHA:n</string>
     <string name="recaptcha_cookies_cleared">reCAPTCHA-evästeet on poistettu</string>
     <string name="clear_cookie_title">Poista reCAPTCHA-evästeet</string>
-    <string name="youtube_restricted_mode_enabled_summary">YouTube tarjoaa ”Rajoitetun tilan”, joka piilottaa aikuisviihdesisällön.</string>
-    <string name="show_age_restricted_content_summary">Näytä mahdollisesti lapsille sopimaton sisältö, jolla on ikäraja (esim. 18+).</string>
+    <string name="youtube_restricted_mode_enabled_summary">YouTube tarjoaa ”Rajoitetun tilan”, joka piilottaa aikuisviihdesisällön</string>
+    <string name="show_age_restricted_content_summary">Näytä mahdollisesti lapsille sopimaton sisältö, jolla on ikäraja (esim. 18+)</string>
+    <string name="notification_colorize_summary">Anna Androidin muokata ilmoituksen väriä esikatselukuvan päävärin mukaan (tämä ei ole mahdollista kaikilla laitteilla)</string>
+    <string name="notification_colorize_title">Käytä värejä ilmoituksessa</string>
+    <string name="show_thumbnail_summary">Käytä esikatselukuvaa lukitusruudun ja ilmoitusten taustakuvana</string>
+    <string name="show_thumbnail_title">Näytä esikatselukuva</string>
+    <string name="msg_calculating_hash">Lasketaan</string>
+    <string name="show_meta_info_summary">Poista käytöstä piilotakseen metatiedot suoratoiston luojasta, sen sisällöstä tai hakupyynnöstä.</string>
+    <string name="show_meta_info_title">Näytä metatieto</string>
+    <string name="recent">Viimeisimmät</string>
+    <string name="show_description_title">Näytä kuvaus</string>
+    <string name="open_with">Avaa sovelluksella</string>
+    <string name="show_description_summary">Poista valinta piilottaaksesi videon kuvauksen ja lisätiedot</string>
+    <string name="no_app_to_open_intent">Mikään sovellus laitteessasi ei voi avata tätä</string>
+    <string name="chapters">Jaksot</string>
+    <string name="description_tab_description">Kuvaus</string>
+    <string name="related_streams_tab_description">Samankaltaiset striimit</string>
+    <string name="comments_tab_description">Kommentit</string>
 </resources>

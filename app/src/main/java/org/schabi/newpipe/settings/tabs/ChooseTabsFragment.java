@@ -27,9 +27,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.error.ErrorActivity;
+import org.schabi.newpipe.error.ErrorInfo;
+import org.schabi.newpipe.error.UserAction;
 import org.schabi.newpipe.extractor.NewPipe;
-import org.schabi.newpipe.report.ErrorActivity;
-import org.schabi.newpipe.report.UserAction;
 import org.schabi.newpipe.settings.SelectChannelFragment;
 import org.schabi.newpipe.settings.SelectKioskFragment;
 import org.schabi.newpipe.settings.SelectPlaylistFragment;
@@ -182,10 +183,9 @@ public class ChooseTabsFragment extends Fragment {
         final Tab.Type type = typeFrom(tabId);
 
         if (type == null) {
-            ErrorActivity.reportError(requireContext(),
-                    new IllegalStateException("Tab id not found: " + tabId), null, null,
-                    ErrorActivity.ErrorInfo.make(UserAction.SOMETHING_ELSE, "none",
-                            "Choosing tabs on settings", 0));
+            ErrorActivity.reportErrorInSnackbar(this,
+                    new ErrorInfo(new IllegalStateException("Tab id not found: " + tabId),
+                            UserAction.SOMETHING_ELSE, "Choosing tabs on settings"));
             return;
         }
 
@@ -334,7 +334,7 @@ public class ChooseTabsFragment extends Fragment {
     private class SelectedTabsAdapter
             extends RecyclerView.Adapter<ChooseTabsFragment.SelectedTabsAdapter.TabViewHolder> {
         private final LayoutInflater inflater;
-        private ItemTouchHelper itemTouchHelper;
+        private final ItemTouchHelper itemTouchHelper;
 
         SelectedTabsAdapter(final Context context, final ItemTouchHelper itemTouchHelper) {
             this.itemTouchHelper = itemTouchHelper;
@@ -367,9 +367,9 @@ public class ChooseTabsFragment extends Fragment {
         }
 
         class TabViewHolder extends RecyclerView.ViewHolder {
-            private AppCompatImageView tabIconView;
-            private TextView tabNameView;
-            private ImageView handle;
+            private final AppCompatImageView tabIconView;
+            private final TextView tabNameView;
+            private final ImageView handle;
 
             TabViewHolder(final View itemView) {
                 super(itemView);

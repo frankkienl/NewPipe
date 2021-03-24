@@ -29,32 +29,28 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import icepick.State
-import java.util.Calendar
-import kotlinx.android.synthetic.main.error_retry.error_button_retry
-import kotlinx.android.synthetic.main.error_retry.error_message_view
-import kotlinx.android.synthetic.main.fragment_feed.empty_state_view
-import kotlinx.android.synthetic.main.fragment_feed.error_panel
-import kotlinx.android.synthetic.main.fragment_feed.items_list
-import kotlinx.android.synthetic.main.fragment_feed.loading_progress_bar
-import kotlinx.android.synthetic.main.fragment_feed.loading_progress_text
-import kotlinx.android.synthetic.main.fragment_feed.refresh_root_view
-import kotlinx.android.synthetic.main.fragment_feed.refresh_subtitle_text
-import kotlinx.android.synthetic.main.fragment_feed.refresh_text
 import org.schabi.newpipe.R
 import org.schabi.newpipe.database.feed.model.FeedGroupEntity
+import org.schabi.newpipe.databinding.FragmentFeedBinding
+import org.schabi.newpipe.error.ErrorInfo
+import org.schabi.newpipe.error.UserAction
 import org.schabi.newpipe.fragments.list.BaseListFragment
+import org.schabi.newpipe.ktx.animate
+import org.schabi.newpipe.ktx.animateHideRecyclerViewAllowingScrolling
 import org.schabi.newpipe.local.feed.service.FeedLoadService
-import org.schabi.newpipe.report.UserAction
-import org.schabi.newpipe.util.AnimationUtils.animateView
 import org.schabi.newpipe.util.Localization
+import java.time.OffsetDateTime
 
 class FeedFragment : BaseListFragment<FeedState, Unit>() {
+    private var _feedBinding: FragmentFeedBinding? = null
+    private val feedBinding get() = _feedBinding!!
+
     private lateinit var viewModel: FeedViewModel
     @State
     @JvmField
@@ -62,7 +58,7 @@ class FeedFragment : BaseListFragment<FeedState, Unit>() {
 
     private var groupId = FeedGroupEntity.GROUP_ALL_ID
     private var groupName = ""
-    private var oldestSubscriptionUpdate: Calendar? = null
+    private var oldestSubscriptionUpdate: OffsetDateTime? = null
 
     init {
         setHasOptionsMenu(true)
@@ -73,7 +69,7 @@ class FeedFragment : BaseListFragment<FeedState, Unit>() {
         super.onCreate(savedInstanceState)
 
         groupId = arguments?.getLong(KEY_GROUP_ID, FeedGroupEntity.GROUP_ALL_ID)
-                ?: FeedGroupEntity.GROUP_ALL_ID
+            ?: FeedGroupEntity.GROUP_ALL_ID
         groupName = arguments?.getString(KEY_GROUP_NAME) ?: ""
     }
 
@@ -82,15 +78,17 @@ class FeedFragment : BaseListFragment<FeedState, Unit>() {
     }
 
     override fun onViewCreated(rootView: View, savedInstanceState: Bundle?) {
+        // super.onViewCreated() calls initListeners() which require the binding to be initialized
+        _feedBinding = FragmentFeedBinding.bind(rootView)
         super.onViewCreated(rootView, savedInstanceState)
 
         viewModel = ViewModelProvider(this, FeedViewModel.Factory(requireContext(), groupId)).get(FeedViewModel::class.java)
-        viewModel.stateLiveData.observe(viewLifecycleOwner, Observer { it?.let(::handleResult) })
+        viewModel.stateLiveData.observe(viewLifecycleOwner) { it?.let(::handleResult) }
     }
 
     override fun onPause() {
         super.onPause()
-        listState = items_list?.layoutManager?.onSaveInstanceState()
+        listState = feedBinding.itemsList.layoutManager?.onSaveInstanceState()
     }
 
     override fun onResume() {
@@ -108,9 +106,8 @@ class FeedFragment : BaseListFragment<FeedState, Unit>() {
 
     override fun initListeners() {
         super.initListeners()
-        refresh_root_view.setOnClickListener {
-            triggerUpdate()
-        }
+        feedBinding.refreshRootView.setOnClickListener { reloadContent() }
+        feedBinding.swipeRefreshLayout.setOnRefreshListener { reloadContent() }
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -140,15 +137,15 @@ class FeedFragment : BaseListFragment<FeedState, Unit>() {
             }
 
             AlertDialog.Builder(requireContext())
-                    .setMessage(R.string.feed_use_dedicated_fetch_method_help_text)
-                    .setNeutralButton(enableDisableButtonText) { _, _ ->
-                        sharedPreferences.edit()
-                                .putBoolean(getString(R.string.feed_use_dedicated_fetch_method_key), !usingDedicatedMethod)
-                                .apply()
+                .setMessage(R.string.feed_use_dedicated_fetch_method_help_text)
+                .setNeutralButton(enableDisableButtonText) { _, _ ->
+                    sharedPreferences.edit {
+                        putBoolean(getString(R.string.feed_use_dedicated_fetch_method_key), !usingDedicatedMethod)
                     }
-                    .setPositiveButton(resources.getString(R.string.finish), null)
-                    .create()
-                    .show()
+                }
+                .setPositiveButton(resources.getString(R.string.finish), null)
+                .create()
+                .show()
             return true
         }
 
@@ -165,54 +162,36 @@ class FeedFragment : BaseListFragment<FeedState, Unit>() {
         activity?.supportActionBar?.subtitle = null
     }
 
+    override fun onDestroyView() {
+        _feedBinding = null
+        super.onDestroyView()
+    }
+
     // /////////////////////////////////////////////////////////////////////////
     // Handling
     // /////////////////////////////////////////////////////////////////////////
 
     override fun showLoading() {
-        animateView(refresh_root_view, false, 0)
-        animateView(items_list, false, 0)
-
-        animateView(loading_progress_bar, true, 200)
-        animateView(loading_progress_text, true, 200)
-
-        empty_state_view?.let { animateView(it, false, 0) }
-        animateView(error_panel, false, 0)
+        super.showLoading()
+        feedBinding.itemsList.animateHideRecyclerViewAllowingScrolling()
+        feedBinding.refreshRootView.animate(false, 0)
+        feedBinding.loadingProgressText.animate(true, 200)
+        feedBinding.swipeRefreshLayout.isRefreshing = true
     }
 
     override fun hideLoading() {
-        animateView(refresh_root_view, true, 200)
-        animateView(items_list, true, 300)
-
-        animateView(loading_progress_bar, false, 0)
-        animateView(loading_progress_text, false, 0)
-
-        empty_state_view?.let { animateView(it, false, 0) }
-        animateView(error_panel, false, 0)
+        super.hideLoading()
+        feedBinding.refreshRootView.animate(true, 200)
+        feedBinding.loadingProgressText.animate(false, 0)
+        feedBinding.swipeRefreshLayout.isRefreshing = false
     }
 
     override fun showEmptyState() {
-        animateView(refresh_root_view, true, 200)
-        animateView(items_list, false, 0)
-
-        animateView(loading_progress_bar, false, 0)
-        animateView(loading_progress_text, false, 0)
-
-        empty_state_view?.let { animateView(it, true, 800) }
-        animateView(error_panel, false, 0)
-    }
-
-    override fun showError(message: String, showRetryButton: Boolean) {
-        infoListAdapter.clearStreamItemList()
-        animateView(refresh_root_view, false, 120)
-        animateView(items_list, false, 120)
-
-        animateView(loading_progress_bar, false, 120)
-        animateView(loading_progress_text, false, 120)
-
-        error_message_view.text = message
-        animateView(error_button_retry, showRetryButton, if (showRetryButton) 600 else 0)
-        animateView(error_panel, true, 300)
+        super.showEmptyState()
+        feedBinding.itemsList.animateHideRecyclerViewAllowingScrolling()
+        feedBinding.refreshRootView.animate(true, 200)
+        feedBinding.loadingProgressText.animate(false, 0)
+        feedBinding.swipeRefreshLayout.isRefreshing = false
     }
 
     override fun handleResult(result: FeedState) {
@@ -225,44 +204,52 @@ class FeedFragment : BaseListFragment<FeedState, Unit>() {
         updateRefreshViewState()
     }
 
+    override fun handleError() {
+        super.handleError()
+        infoListAdapter.clearStreamItemList()
+        feedBinding.itemsList.animateHideRecyclerViewAllowingScrolling()
+        feedBinding.refreshRootView.animate(false, 0)
+        feedBinding.loadingProgressText.animate(false, 0)
+        feedBinding.swipeRefreshLayout.isRefreshing = false
+    }
+
     private fun handleProgressState(progressState: FeedState.ProgressState) {
         showLoading()
 
         val isIndeterminate = progressState.currentProgress == -1 &&
-                progressState.maxProgress == -1
+            progressState.maxProgress == -1
 
-        if (!isIndeterminate) {
-            loading_progress_text.text = "${progressState.currentProgress}/${progressState.maxProgress}"
+        feedBinding.loadingProgressText.text = if (!isIndeterminate) {
+            "${progressState.currentProgress}/${progressState.maxProgress}"
         } else if (progressState.progressMessage > 0) {
-            loading_progress_text?.setText(progressState.progressMessage)
+            getString(progressState.progressMessage)
         } else {
-            loading_progress_text?.text = "∞/∞"
+            "∞/∞"
         }
 
-        loading_progress_bar.isIndeterminate = isIndeterminate ||
-                (progressState.maxProgress > 0 && progressState.currentProgress == 0)
-        loading_progress_bar.progress = progressState.currentProgress
+        feedBinding.loadingProgressBar.isIndeterminate = isIndeterminate ||
+            (progressState.maxProgress > 0 && progressState.currentProgress == 0)
+        feedBinding.loadingProgressBar.progress = progressState.currentProgress
 
-        loading_progress_bar.max = progressState.maxProgress
+        feedBinding.loadingProgressBar.max = progressState.maxProgress
     }
 
     private fun handleLoadedState(loadedState: FeedState.LoadedState) {
         infoListAdapter.setInfoItemList(loadedState.items)
         listState?.run {
-            items_list.layoutManager?.onRestoreInstanceState(listState)
+            feedBinding.itemsList.layoutManager?.onRestoreInstanceState(listState)
             listState = null
         }
 
         oldestSubscriptionUpdate = loadedState.oldestUpdate
 
-        refresh_subtitle_text.isVisible = loadedState.notLoadedCount > 0
-        if (loadedState.notLoadedCount > 0) {
-            refresh_subtitle_text.text = getString(R.string.feed_subscription_not_loaded_count, loadedState.notLoadedCount)
-        }
-
-        if (loadedState.itemsErrors.isNotEmpty()) {
-            showSnackBarError(loadedState.itemsErrors, UserAction.REQUESTED_FEED,
-                    "none", "Loading feed", R.string.general_error)
+        val loadedCount = loadedState.notLoadedCount > 0
+        feedBinding.refreshSubtitleText.isVisible = loadedCount
+        if (loadedCount) {
+            feedBinding.refreshSubtitleText.text = getString(
+                R.string.feed_subscription_not_loaded_count,
+                loadedState.notLoadedCount
+            )
         }
 
         if (loadedState.items.isEmpty()) {
@@ -273,12 +260,13 @@ class FeedFragment : BaseListFragment<FeedState, Unit>() {
     }
 
     private fun handleErrorState(errorState: FeedState.ErrorState): Boolean {
-        hideLoading()
-        errorState.error?.let {
-            onError(errorState.error)
-            return true
+        return if (errorState.error == null) {
+            hideLoading()
+            false
+        } else {
+            showError(ErrorInfo(errorState.error, UserAction.REQUESTED_FEED, "Loading feed"))
+            true
         }
-        return false
     }
 
     private fun updateRelativeTimeViews() {
@@ -287,12 +275,10 @@ class FeedFragment : BaseListFragment<FeedState, Unit>() {
     }
 
     private fun updateRefreshViewState() {
-        val oldestSubscriptionUpdateText = when {
-            oldestSubscriptionUpdate != null -> Localization.relativeTime(oldestSubscriptionUpdate!!)
-            else -> "—"
-        }
-
-        refresh_text?.text = getString(R.string.feed_oldest_subscription_update, oldestSubscriptionUpdateText)
+        feedBinding.refreshText.text = getString(
+            R.string.feed_oldest_subscription_update,
+            oldestSubscriptionUpdate?.let { Localization.relativeTime(it) } ?: "—"
+        )
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -300,27 +286,16 @@ class FeedFragment : BaseListFragment<FeedState, Unit>() {
     // /////////////////////////////////////////////////////////////////////////
 
     override fun doInitialLoadLogic() {}
-    override fun reloadContent() = triggerUpdate()
     override fun loadMoreItems() {}
     override fun hasMoreItems() = false
 
-    private fun triggerUpdate() {
-        getActivity()?.startService(Intent(requireContext(), FeedLoadService::class.java).apply {
-            putExtra(FeedLoadService.EXTRA_GROUP_ID, groupId)
-        })
+    override fun reloadContent() {
+        getActivity()?.startService(
+            Intent(requireContext(), FeedLoadService::class.java).apply {
+                putExtra(FeedLoadService.EXTRA_GROUP_ID, groupId)
+            }
+        )
         listState = null
-    }
-
-    override fun onError(exception: Throwable): Boolean {
-        if (super.onError(exception)) return true
-
-        if (useAsFrontPage) {
-            showSnackBarError(exception, UserAction.REQUESTED_FEED, "none", "Loading Feed", 0)
-            return true
-        }
-
-        onUnrecoverableError(exception, UserAction.REQUESTED_FEED, "none", "Loading Feed", 0)
-        return true
     }
 
     companion object {

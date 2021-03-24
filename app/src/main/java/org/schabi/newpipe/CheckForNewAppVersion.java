@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
@@ -21,12 +22,11 @@ import com.grack.nanojson.JsonObject;
 import com.grack.nanojson.JsonParser;
 import com.grack.nanojson.JsonParserException;
 
-import org.schabi.newpipe.extractor.exceptions.ReCaptchaException;
-import org.schabi.newpipe.report.ErrorActivity;
-import org.schabi.newpipe.report.UserAction;
+import org.schabi.newpipe.error.ErrorActivity;
+import org.schabi.newpipe.error.ErrorInfo;
+import org.schabi.newpipe.error.UserAction;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -35,11 +35,10 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.disposables.Disposables;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public final class CheckForNewAppVersion {
     private CheckForNewAppVersion() { }
@@ -49,56 +48,48 @@ public final class CheckForNewAppVersion {
 
     private static final String GITHUB_APK_SHA1
             = "B0:2E:90:7C:1C:D6:FC:57:C3:35:F0:88:D0:8F:50:5F:94:E4:D2:15";
-    private static final String NEWPIPE_API_URL = "https://newpipe.schabi.org/api/data.json";
+    private static final String NEWPIPE_API_URL = "https://newpipe.net/api/data.json";
 
     /**
-     * Method to get the apk's SHA1 key. See https://stackoverflow.com/questions/9293019/#22506133.
+     * Method to get the APK's SHA1 key. See https://stackoverflow.com/questions/9293019/#22506133.
      *
      * @param application The application
-     * @return String with the apk's SHA1 fingeprint in hexadecimal
+     * @return String with the APK's SHA1 fingerprint in hexadecimal
      */
+    @NonNull
     private static String getCertificateSHA1Fingerprint(@NonNull final Application application) {
-        final PackageManager pm = application.getPackageManager();
-        final String packageName = application.getPackageName();
-        final int flags = PackageManager.GET_SIGNATURES;
-        PackageInfo packageInfo = null;
-
+        final PackageInfo packageInfo;
         try {
-            packageInfo = pm.getPackageInfo(packageName, flags);
+            packageInfo = application.getPackageManager().getPackageInfo(
+                    application.getPackageName(), PackageManager.GET_SIGNATURES);
         } catch (final PackageManager.NameNotFoundException e) {
-            ErrorActivity.reportError(application, e, null, null,
-                    ErrorActivity.ErrorInfo.make(UserAction.SOMETHING_ELSE, "none",
-                            "Could not find package info", R.string.app_ui_crash));
+            ErrorActivity.reportError(application, new ErrorInfo(e,
+                    UserAction.CHECK_FOR_NEW_APP_VERSION, "Could not find package info"));
+            return "";
         }
 
-        final Signature[] signatures = packageInfo.signatures;
-        final byte[] cert = signatures[0].toByteArray();
-        final InputStream input = new ByteArrayInputStream(cert);
-
-        X509Certificate c = null;
-
+        final X509Certificate c;
         try {
+            final Signature[] signatures = packageInfo.signatures;
+            final byte[] cert = signatures[0].toByteArray();
+            final InputStream input = new ByteArrayInputStream(cert);
             final CertificateFactory cf = CertificateFactory.getInstance("X509");
             c = (X509Certificate) cf.generateCertificate(input);
         } catch (final CertificateException e) {
-            ErrorActivity.reportError(application, e, null, null,
-                    ErrorActivity.ErrorInfo.make(UserAction.SOMETHING_ELSE, "none",
-                            "Certificate error", R.string.app_ui_crash));
+            ErrorActivity.reportError(application, new ErrorInfo(e,
+                    UserAction.CHECK_FOR_NEW_APP_VERSION, "Certificate error"));
+            return "";
         }
-
-        String hexString = null;
 
         try {
             final MessageDigest md = MessageDigest.getInstance("SHA1");
             final byte[] publicKey = md.digest(c.getEncoded());
-            hexString = byte2HexFormatted(publicKey);
+            return byte2HexFormatted(publicKey);
         } catch (NoSuchAlgorithmException | CertificateEncodingException e) {
-            ErrorActivity.reportError(application, e, null, null,
-                    ErrorActivity.ErrorInfo.make(UserAction.SOMETHING_ELSE, "none",
-                            "Could not retrieve SHA1 key", R.string.app_ui_crash));
+            ErrorActivity.reportError(application, new ErrorInfo(e,
+                    UserAction.CHECK_FOR_NEW_APP_VERSION, "Could not retrieve SHA1 key"));
+            return "";
         }
-
-        return hexString;
     }
 
     private static String byte2HexFormatted(final byte[] arr) {
@@ -138,7 +129,13 @@ public final class CheckForNewAppVersion {
 
         if (BuildConfig.VERSION_CODE < versionCode) {
             // A pending intent to open the apk location url in the browser.
-            final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(apkLocationUrl));
+            final Intent viewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(apkLocationUrl));
+
+            final Intent intent = new Intent(Intent.ACTION_CHOOSER);
+            intent.putExtra(Intent.EXTRA_INTENT, viewIntent);
+            intent.putExtra(Intent.EXTRA_TITLE, R.string.open_with);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             final PendingIntent pendingIntent
                     = PendingIntent.getActivity(application, 0, intent, 0);
 
@@ -163,66 +160,88 @@ public final class CheckForNewAppVersion {
     }
 
     private static boolean isConnected(@NonNull final App app) {
-        final ConnectivityManager cm = ContextCompat.getSystemService(app,
-                ConnectivityManager.class);
-        return cm.getActiveNetworkInfo() != null
-                && cm.getActiveNetworkInfo().isConnected();
+        final ConnectivityManager connectivityManager =
+                ContextCompat.getSystemService(app, ConnectivityManager.class);
+        return connectivityManager != null && connectivityManager.getActiveNetworkInfo() != null
+                && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
     public static boolean isGithubApk(@NonNull final App app) {
         return getCertificateSHA1Fingerprint(app).equals(GITHUB_APK_SHA1);
     }
 
-    @NonNull
+    @Nullable
     public static Disposable checkNewVersion(@NonNull final App app) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+        final NewVersionManager manager = new NewVersionManager();
 
         // Check if user has enabled/disabled update checking
         // and if the current apk is a github one or not.
-        if (!prefs.getBoolean(app.getString(R.string.update_app_key), true)
-                || !isGithubApk(app)) {
-            return Disposables.empty();
+        if (!prefs.getBoolean(app.getString(R.string.update_app_key), true) || !isGithubApk(app)) {
+            return null;
         }
 
-        return Observable.fromCallable(() -> {
-            if (!isConnected(app)) {
-                return null;
-            }
-
-            // Make a network request to get latest NewPipe data.
-            try {
-                return DownloaderImpl.getInstance().get(NEWPIPE_API_URL).responseBody();
-            } catch (IOException | ReCaptchaException e) {
-                // connectivity problems, do not alarm user and fail silently
-                if (DEBUG) {
-                    Log.w(TAG, Log.getStackTraceString(e));
-                }
-            }
-
+        // Check if the last request has happened a certain time ago
+        // to reduce the number of API requests.
+        final long expiry = prefs.getLong(app.getString(R.string.update_expiry_key), 0);
+        if (!manager.isExpired(expiry)) {
             return null;
-        })
+        }
+
+        return Maybe
+            .fromCallable(() -> {
+                if (!isConnected(app)) {
+                    return null;
+                }
+
+                // Make a network request to get latest NewPipe data.
+                return DownloaderImpl.getInstance().get(NEWPIPE_API_URL);
+            })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    // Parse the json from the response.
-                    if (response != null) {
-                        try {
-                            final JsonObject githubStableObject = JsonParser.object().from(response)
-                                    .getObject("flavors").getObject("github").getObject("stable");
+                .subscribe(
+                        response -> {
+                            try {
+                                // Store a timestamp which needs to be exceeded,
+                                // before a new request to the API is made.
+                                final long newExpiry = manager
+                                    .coerceExpiry(response.getHeader("expires"));
+                                prefs.edit()
+                                    .putLong(app.getString(R.string.update_expiry_key), newExpiry)
+                                    .apply();
+                            } catch (final Exception e) {
+                                if (DEBUG) {
+                                    Log.w(TAG, "Could not extract and save new expiry date", e);
+                                }
+                            }
 
-                            final String versionName = githubStableObject.getString("version");
-                            final int versionCode = githubStableObject.getInt("version_code");
-                            final String apkLocationUrl = githubStableObject.getString("apk");
+                            // Parse the json from the response.
+                            try {
+                                final JsonObject githubStableObject = JsonParser.object()
+                                    .from(response.responseBody()).getObject("flavors")
+                                    .getObject("github").getObject("stable");
 
-                            compareAppVersionAndShowNotification(app, versionName, apkLocationUrl,
-                                    versionCode);
-                        } catch (final JsonParserException e) {
+                                final String versionName = githubStableObject
+                                    .getString("version");
+                                final int versionCode = githubStableObject
+                                    .getInt("version_code");
+                                final String apkLocationUrl = githubStableObject
+                                    .getString("apk");
+
+                                compareAppVersionAndShowNotification(app, versionName,
+                                        apkLocationUrl, versionCode);
+                            } catch (final JsonParserException e) {
+                                // connectivity problems, do not alarm user and fail silently
+                                if (DEBUG) {
+                                    Log.w(TAG, "Could not get NewPipe API: invalid json", e);
+                                }
+                            }
+                        },
+                        e -> {
                             // connectivity problems, do not alarm user and fail silently
                             if (DEBUG) {
-                                Log.w(TAG, Log.getStackTraceString(e));
+                                Log.w(TAG, "Could not get NewPipe API: network problem", e);
                             }
-                        }
-                    }
-                });
+                        });
     }
 }

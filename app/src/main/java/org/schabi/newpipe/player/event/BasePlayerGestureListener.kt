@@ -7,24 +7,25 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
-import org.schabi.newpipe.player.BasePlayer
+import org.schabi.newpipe.ktx.animate
 import org.schabi.newpipe.player.MainPlayer
-import org.schabi.newpipe.player.VideoPlayerImpl
+import org.schabi.newpipe.player.Player
 import org.schabi.newpipe.player.helper.PlayerHelper
-import org.schabi.newpipe.util.AnimationUtils
+import org.schabi.newpipe.player.helper.PlayerHelper.savePopupPositionAndSizeToPrefs
 import kotlin.math.abs
 import kotlin.math.hypot
 import kotlin.math.max
+import kotlin.math.min
 
 /**
- * Base gesture handling for [VideoPlayerImpl]
+ * Base gesture handling for [Player]
  *
  * This class contains the logic for the player gestures like View preparations
  * and provides some abstract methods to make it easier separating the logic from the UI.
  */
 abstract class BasePlayerGestureListener(
     @JvmField
-    protected val playerImpl: VideoPlayerImpl,
+    protected val player: Player,
     @JvmField
     protected val service: MainPlayer
 ) : GestureDetector.SimpleOnGestureListener(), View.OnTouchListener {
@@ -77,7 +78,7 @@ abstract class BasePlayerGestureListener(
     // ///////////////////////////////////////////////////////////////////
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
-        return if (playerImpl.popupPlayerSelected()) {
+        return if (player.popupPlayerSelected()) {
             onTouchInPopup(v, event)
         } else {
             onTouchInMain(v, event)
@@ -85,14 +86,14 @@ abstract class BasePlayerGestureListener(
     }
 
     private fun onTouchInMain(v: View, event: MotionEvent): Boolean {
-        playerImpl.gestureDetector.onTouchEvent(event)
+        player.gestureDetector.onTouchEvent(event)
         if (event.action == MotionEvent.ACTION_UP && isMovingInMain) {
             isMovingInMain = false
             onScrollEnd(MainPlayer.PlayerType.VIDEO, event)
         }
         return when (event.action) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                v.parent.requestDisallowInterceptTouchEvent(playerImpl.isFullscreen)
+                v.parent.requestDisallowInterceptTouchEvent(player.isFullscreen)
                 true
             }
             MotionEvent.ACTION_UP -> {
@@ -104,7 +105,7 @@ abstract class BasePlayerGestureListener(
     }
 
     private fun onTouchInPopup(v: View, event: MotionEvent): Boolean {
-        playerImpl.gestureDetector.onTouchEvent(event)
+        player.gestureDetector.onTouchEvent(event)
         if (event.pointerCount == 2 && !isMovingInPopup && !isResizing) {
             if (DEBUG) {
                 Log.d(TAG, "onTouch() 2 finger pointer detected, enabling resizing.")
@@ -117,22 +118,30 @@ abstract class BasePlayerGestureListener(
             initSecPointerX = event.getX(1)
             initSecPointerY = event.getY(1)
             // record distance between fingers
-            initPointerDistance = Math.hypot(initFirstPointerX - initSecPointerX.toDouble(),
-                initFirstPointerY - initSecPointerY.toDouble())
+            initPointerDistance = hypot(
+                initFirstPointerX - initSecPointerX.toDouble(),
+                initFirstPointerY - initSecPointerY.toDouble()
+            )
 
             isResizing = true
         }
         if (event.action == MotionEvent.ACTION_MOVE && !isMovingInPopup && isResizing) {
             if (DEBUG) {
-                Log.d(TAG, "onTouch() ACTION_MOVE > v = [$v], e1.getRaw = [${event.rawX}" +
-                    ", ${event.rawY}]")
+                Log.d(
+                    TAG,
+                    "onTouch() ACTION_MOVE > v = [$v], e1.getRaw =" +
+                        "[${event.rawX}, ${event.rawY}]"
+                )
             }
             return handleMultiDrag(event)
         }
         if (event.action == MotionEvent.ACTION_UP) {
             if (DEBUG) {
-                Log.d(TAG, "onTouch() ACTION_UP > v = [$v], e1.getRaw = [${event.rawX}" +
-                    ", ${event.rawY}]")
+                Log.d(
+                    TAG,
+                    "onTouch() ACTION_UP > v = [$v], e1.getRaw =" +
+                        " [${event.rawX}, ${event.rawY}]"
+                )
             }
             if (isMovingInPopup) {
                 isMovingInPopup = false
@@ -148,10 +157,10 @@ abstract class BasePlayerGestureListener(
                 initSecPointerY = (-1).toFloat()
 
                 onPopupResizingEnd()
-                playerImpl.changeState(playerImpl.currentState)
+                player.changeState(player.currentState)
             }
-            if (!playerImpl.isPopupClosing) {
-                playerImpl.savePositionAndSize()
+            if (!player.isPopupClosing) {
+                savePopupPositionAndSizeToPrefs(player)
             }
         }
 
@@ -162,31 +171,34 @@ abstract class BasePlayerGestureListener(
     private fun handleMultiDrag(event: MotionEvent): Boolean {
         if (initPointerDistance != -1.0 && event.pointerCount == 2) {
             // get the movements of the fingers
-            val firstPointerMove = hypot(event.getX(0) - initFirstPointerX.toDouble(),
-                event.getY(0) - initFirstPointerY.toDouble())
-            val secPointerMove = hypot(event.getX(1) - initSecPointerX.toDouble(),
-                event.getY(1) - initSecPointerY.toDouble())
+            val firstPointerMove = hypot(
+                event.getX(0) - initFirstPointerX.toDouble(),
+                event.getY(0) - initFirstPointerY.toDouble()
+            )
+            val secPointerMove = hypot(
+                event.getX(1) - initSecPointerX.toDouble(),
+                event.getY(1) - initSecPointerY.toDouble()
+            )
 
             // minimum threshold beyond which pinch gesture will work
             val minimumMove = ViewConfiguration.get(service).scaledTouchSlop
 
             if (max(firstPointerMove, secPointerMove) > minimumMove) {
                 // calculate current distance between the pointers
-                val currentPointerDistance = hypot(event.getX(0) - event.getX(1).toDouble(),
-                    event.getY(0) - event.getY(1).toDouble())
+                val currentPointerDistance = hypot(
+                    event.getX(0) - event.getX(1).toDouble(),
+                    event.getY(0) - event.getY(1).toDouble()
+                )
 
-                val popupWidth = playerImpl.popupWidth.toDouble()
+                val popupWidth = player.popupLayoutParams!!.width.toDouble()
                 // change co-ordinates of popup so the center stays at the same position
                 val newWidth = popupWidth * currentPointerDistance / initPointerDistance
                 initPointerDistance = currentPointerDistance
-                playerImpl.popupLayoutParams.x += ((popupWidth - newWidth) / 2.0).toInt()
+                player.popupLayoutParams!!.x += ((popupWidth - newWidth) / 2.0).toInt()
 
-                playerImpl.checkPopupPositionBounds()
-                playerImpl.updateScreenSize()
-
-                playerImpl.updatePopupSize(
-                    Math.min(playerImpl.screenWidth.toDouble(), newWidth).toInt(),
-                    -1)
+                player.checkPopupPositionBounds()
+                player.updateScreenSize()
+                player.changePopupSize(min(player.screenWidth.toDouble(), newWidth).toInt())
                 return true
             }
         }
@@ -206,7 +218,7 @@ abstract class BasePlayerGestureListener(
             return true
         }
 
-        return if (playerImpl.popupPlayerSelected())
+        return if (player.popupPlayerSelected())
             onDownInPopup(e)
         else
             true
@@ -215,12 +227,10 @@ abstract class BasePlayerGestureListener(
     private fun onDownInPopup(e: MotionEvent): Boolean {
         // Fix popup position when the user touch it, it may have the wrong one
         // because the soft input is visible (the draggable area is currently resized).
-        playerImpl.updateScreenSize()
-        playerImpl.checkPopupPositionBounds()
-        initialPopupX = playerImpl.popupLayoutParams.x
-        initialPopupY = playerImpl.popupLayoutParams.y
-        playerImpl.popupWidth = playerImpl.popupLayoutParams.width.toFloat()
-        playerImpl.popupHeight = playerImpl.popupLayoutParams.height.toFloat()
+        player.updateScreenSize()
+        player.checkPopupPositionBounds()
+        initialPopupX = player.popupLayoutParams!!.x
+        initialPopupY = player.popupLayoutParams!!.y
         return super.onDown(e)
     }
 
@@ -239,15 +249,15 @@ abstract class BasePlayerGestureListener(
         if (isDoubleTapping)
             return true
 
-        if (playerImpl.popupPlayerSelected()) {
-            if (playerImpl.player == null)
+        if (player.popupPlayerSelected()) {
+            if (player.exoPlayerIsNull())
                 return false
 
             onSingleTap(MainPlayer.PlayerType.POPUP)
             return true
         } else {
             super.onSingleTapConfirmed(e)
-            if (playerImpl.currentState == BasePlayer.STATE_BLOCKED)
+            if (player.currentState == Player.STATE_BLOCKED)
                 return true
 
             onSingleTap(MainPlayer.PlayerType.VIDEO)
@@ -256,10 +266,10 @@ abstract class BasePlayerGestureListener(
     }
 
     override fun onLongPress(e: MotionEvent?) {
-        if (playerImpl.popupPlayerSelected()) {
-            playerImpl.updateScreenSize()
-            playerImpl.checkPopupPositionBounds()
-            playerImpl.updatePopupSize(playerImpl.screenWidth.toInt(), -1)
+        if (player.popupPlayerSelected()) {
+            player.updateScreenSize()
+            player.checkPopupPositionBounds()
+            player.changePopupSize(player.screenWidth.toInt())
         }
     }
 
@@ -269,7 +279,7 @@ abstract class BasePlayerGestureListener(
         distanceX: Float,
         distanceY: Float
     ): Boolean {
-        return if (playerImpl.popupPlayerSelected()) {
+        return if (player.popupPlayerSelected()) {
             onScrollInPopup(initialEvent, movingEvent, distanceX, distanceY)
         } else {
             onScrollInMain(initialEvent, movingEvent, distanceX, distanceY)
@@ -282,19 +292,18 @@ abstract class BasePlayerGestureListener(
         velocityX: Float,
         velocityY: Float
     ): Boolean {
-        return if (playerImpl.popupPlayerSelected()) {
+        return if (player.popupPlayerSelected()) {
             val absVelocityX = abs(velocityX)
             val absVelocityY = abs(velocityY)
             if (absVelocityX.coerceAtLeast(absVelocityY) > tossFlingVelocity) {
                 if (absVelocityX > tossFlingVelocity) {
-                    playerImpl.popupLayoutParams.x = velocityX.toInt()
+                    player.popupLayoutParams!!.x = velocityX.toInt()
                 }
                 if (absVelocityY > tossFlingVelocity) {
-                    playerImpl.popupLayoutParams.y = velocityY.toInt()
+                    player.popupLayoutParams!!.y = velocityY.toInt()
                 }
-                playerImpl.checkPopupPositionBounds()
-                playerImpl.windowManager
-                    .updateViewLayout(playerImpl.rootView, playerImpl.popupLayoutParams)
+                player.checkPopupPositionBounds()
+                player.windowManager!!.updateViewLayout(player.rootView, player.popupLayoutParams)
                 return true
             }
             return false
@@ -310,27 +319,35 @@ abstract class BasePlayerGestureListener(
         distanceY: Float
     ): Boolean {
 
-        if (!playerImpl.isFullscreen) {
+        if (!player.isFullscreen) {
             return false
         }
 
         val isTouchingStatusBar: Boolean = initialEvent.y < getStatusBarHeight(service)
-        val isTouchingNavigationBar: Boolean = (initialEvent.y
-            > playerImpl.rootView.height - getNavigationBarHeight(service))
+        val isTouchingNavigationBar: Boolean =
+            initialEvent.y > (player.rootView.height - getNavigationBarHeight(service))
         if (isTouchingStatusBar || isTouchingNavigationBar) {
             return false
         }
 
         val insideThreshold = abs(movingEvent.y - initialEvent.y) <= MOVEMENT_THRESHOLD
-        if (!isMovingInMain && (insideThreshold || abs(distanceX) > abs(distanceY)) ||
-            playerImpl.currentState == BasePlayer.STATE_COMPLETED) {
+        if (
+            !isMovingInMain && (insideThreshold || abs(distanceX) > abs(distanceY)) ||
+            player.currentState == Player.STATE_COMPLETED
+        ) {
             return false
         }
 
         isMovingInMain = true
 
-        onScroll(MainPlayer.PlayerType.VIDEO, getDisplayHalfPortion(initialEvent),
-            initialEvent, movingEvent, distanceX, distanceY)
+        onScroll(
+            MainPlayer.PlayerType.VIDEO,
+            getDisplayHalfPortion(initialEvent),
+            initialEvent,
+            movingEvent,
+            distanceX,
+            distanceY
+        )
 
         return true
     }
@@ -347,7 +364,7 @@ abstract class BasePlayerGestureListener(
         }
 
         if (!isMovingInPopup) {
-            AnimationUtils.animateView(playerImpl.closeOverlayButton, true, 200)
+            player.closeOverlayButton.animate(true, 200)
         }
 
         isMovingInPopup = true
@@ -357,26 +374,31 @@ abstract class BasePlayerGestureListener(
         val diffY: Float = (movingEvent.rawY - initialEvent.rawY)
         var posY: Float = (initialPopupY + diffY)
 
-        if (posX > playerImpl.screenWidth - playerImpl.popupWidth) {
-            posX = (playerImpl.screenWidth - playerImpl.popupWidth)
+        if (posX > player.screenWidth - player.popupLayoutParams!!.width) {
+            posX = (player.screenWidth - player.popupLayoutParams!!.width)
         } else if (posX < 0) {
             posX = 0f
         }
 
-        if (posY > playerImpl.screenHeight - playerImpl.popupHeight) {
-            posY = (playerImpl.screenHeight - playerImpl.popupHeight)
+        if (posY > player.screenHeight - player.popupLayoutParams!!.height) {
+            posY = (player.screenHeight - player.popupLayoutParams!!.height)
         } else if (posY < 0) {
             posY = 0f
         }
 
-        playerImpl.popupLayoutParams.x = posX.toInt()
-        playerImpl.popupLayoutParams.y = posY.toInt()
+        player.popupLayoutParams!!.x = posX.toInt()
+        player.popupLayoutParams!!.y = posY.toInt()
 
-        onScroll(MainPlayer.PlayerType.POPUP, getDisplayHalfPortion(initialEvent),
-            initialEvent, movingEvent, distanceX, distanceY)
+        onScroll(
+            MainPlayer.PlayerType.POPUP,
+            getDisplayHalfPortion(initialEvent),
+            initialEvent,
+            movingEvent,
+            distanceX,
+            distanceY
+        )
 
-        playerImpl.windowManager
-            .updateViewLayout(playerImpl.rootView, playerImpl.popupLayoutParams)
+        player.windowManager!!.updateViewLayout(player.rootView, player.popupLayoutParams)
         return true
     }
 
@@ -444,16 +466,16 @@ abstract class BasePlayerGestureListener(
     // ///////////////////////////////////////////////////////////////////
 
     private fun getDisplayPortion(e: MotionEvent): DisplayPortion {
-        return if (playerImpl.playerType == MainPlayer.PlayerType.POPUP) {
+        return if (player.playerType == MainPlayer.PlayerType.POPUP) {
             when {
-                e.x < playerImpl.popupWidth / 3.0 -> DisplayPortion.LEFT
-                e.x > playerImpl.popupWidth * 2.0 / 3.0 -> DisplayPortion.RIGHT
+                e.x < player.popupLayoutParams!!.width / 3.0 -> DisplayPortion.LEFT
+                e.x > player.popupLayoutParams!!.width * 2.0 / 3.0 -> DisplayPortion.RIGHT
                 else -> DisplayPortion.MIDDLE
             }
         } else /* MainPlayer.PlayerType.VIDEO */ {
             when {
-                e.x < playerImpl.rootView.width / 3.0 -> DisplayPortion.LEFT
-                e.x > playerImpl.rootView.width * 2.0 / 3.0 -> DisplayPortion.RIGHT
+                e.x < player.rootView.width / 3.0 -> DisplayPortion.LEFT
+                e.x > player.rootView.width * 2.0 / 3.0 -> DisplayPortion.RIGHT
                 else -> DisplayPortion.MIDDLE
             }
         }
@@ -461,14 +483,14 @@ abstract class BasePlayerGestureListener(
 
     // Currently needed for scrolling since there is no action more the middle portion
     private fun getDisplayHalfPortion(e: MotionEvent): DisplayPortion {
-        return if (playerImpl.playerType == MainPlayer.PlayerType.POPUP) {
+        return if (player.playerType == MainPlayer.PlayerType.POPUP) {
             when {
-                e.x < playerImpl.popupWidth / 2.0 -> DisplayPortion.LEFT_HALF
+                e.x < player.popupLayoutParams!!.width / 2.0 -> DisplayPortion.LEFT_HALF
                 else -> DisplayPortion.RIGHT_HALF
             }
         } else /* MainPlayer.PlayerType.VIDEO */ {
             when {
-                e.x < playerImpl.rootView.width / 2.0 -> DisplayPortion.LEFT_HALF
+                e.x < player.rootView.width / 2.0 -> DisplayPortion.LEFT_HALF
                 else -> DisplayPortion.RIGHT_HALF
             }
         }
@@ -492,7 +514,7 @@ abstract class BasePlayerGestureListener(
 
     companion object {
         private const val TAG = "BasePlayerGestListener"
-        private val DEBUG = BasePlayer.DEBUG
+        private val DEBUG = Player.DEBUG
 
         private const val DOUBLE_TAP_DELAY = 550L
         private const val MOVEMENT_THRESHOLD = 40

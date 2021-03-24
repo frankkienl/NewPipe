@@ -120,6 +120,8 @@
     <string name="show_higher_resolutions_title">Zobrazovat vyšší rozlišení</string>
     <string name="show_higher_resolutions_summary">Pouze některá zařízení dokáží přehrát 2K/4K videa</string>
     <string name="default_video_format_title">Výchozí formát videa</string>
+    <string name="popup_remember_size_pos_title">Pamatovat si vlastnosti vyskakovacího okna</string>
+    <string name="popup_remember_size_pos_summary">Pamatovat si poslední velikost a pozici vyskakovacího okna</string>
     <string name="popup_mode_share_menu_title">Režim vyskakovacího okna</string>
     <string name="subscribe_button_title">Odebírat</string>
     <string name="subscribed_button_title">Odebíráno</string>
@@ -152,11 +154,10 @@
     <string name="filter">Filtr</string>
     <string name="refresh">Obnovit</string>
     <string name="clear">Vyčistit</string>
-    <string name="popup_resizing_indicator_title">Změna velikosti</string>
     <string name="best_resolution">Nejlepší rozlišení</string>
     <string name="undo">Vrátit</string>
-    <string name="notification_channel_name">NewPipe notifikace</string>
-    <string name="notification_channel_description">Notifikace pro NewPipe přehrávače v pozadí a v okně</string>
+    <string name="notification_channel_name">Oznámení NewPipe</string>
+    <string name="notification_channel_description">Oznámení pro NewPipe přehrávače v pozadí a v okně</string>
     <string name="search_no_results">Žádné výsledky</string>
     <string name="empty_subscription_feed_subtitle">Je tu sranda jak v márnici</string>
     <string name="short_billion">mld.</string>
@@ -256,8 +257,8 @@
     <string name="just_once">Pouze jednou</string>
     <string name="import_data_title">Importovat databázi</string>
     <string name="export_data_title">Exportovat databázi</string>
-    <string name="import_data_summary">Přepíše vaši dosavadní historii a odběry</string>
-    <string name="export_data_summary">Exportuje historii, odběry a playlisty</string>
+    <string name="import_data_summary">Přepíše Vaši dosavadní historii, odběry, playlisty a (volitelně) nastavení</string>
+    <string name="export_data_summary">Exportuje historii, odběry, playlisty a nastavení</string>
     <string name="external_player_unsupported_link_type">Externí přehrávače nepodporují tyto druhy odkazů</string>
     <string name="invalid_url_toast">Neplatná URL</string>
     <string name="video_streams_empty">Nenalezeny žádné video streamy</string>
@@ -336,11 +337,14 @@
     <string name="previous_export">Předchozí export</string>
     <string name="subscriptions_import_unsuccessful">Odběry nelze importovat</string>
     <string name="subscriptions_export_unsuccessful">Odběry nelze exportovat</string>
-    <string name="import_youtube_instructions">Importovat YouTube odběry stáhnutím exportního souboru: 
-\n 
-\n1. Přejděte na tuto URL adresu: %1$s 
+    <string name="import_youtube_instructions">Importovat YouTube odběry stáhnutím exportního souboru:
+\n
+\n1. Přejděte na tuto URL adresu: %1$s
 \n2. Na vyžádání se přihlašte
-\n3. Mělo by začít stahování (onoho exportního souboru)</string>
+\n3. Klikněte na \"Jsou zahrnuta všechna data z YouTube\" pak na \"Zrušit výběr všech\" a pak vyberte jen \"odběry\" a klikněte na OK
+\n4. Klikněte na \"Další krok\" a pak na \"Vytvořit export\"
+\n5. Vyčkejte než se objeví tlačítko \"Stáhnout\" a klikněte na něj
+\n6. Ze staženého zip archivu extrahujte .json soubor (nejčastěji na cestě \"Takeout/YouTube a YouTube Music/odběry/odběry.json\") a importujte jej.</string>
     <string name="import_soundcloud_instructions">Importovat SoundCloud profil zadáním URL adresy nebo vašeho ID: 
 \n 
 \n1. Ve svém prohlížeči povolte \"režim pro PC\" (pro mobilní zařízení není stránka dostupná) 
@@ -403,8 +407,8 @@
     <string name="brightness_gesture_control_summary">Používat gesta pro ovládání jasu přehrávače</string>
     <string name="settings_category_updates_title">Aktualizace</string>
     <string name="file_deleted">Soubor smazán</string>
-    <string name="app_update_notification_channel_name">Notifikace aktualizace aplikace</string>
-    <string name="app_update_notification_channel_description">Notifikace pro novou verzi NewPipe</string>
+    <string name="app_update_notification_channel_name">Oznámení o aktualizaci aplikace</string>
+    <string name="app_update_notification_channel_description">Oznámení o nové verzi NewPipe</string>
     <string name="download_to_sdcard_error_title">Externí úložiště není k dispozici</string>
     <string name="saved_tabs_invalid_json">Nelze načíst uložené karty, takže se použijí výchozí karty</string>
     <string name="restore_defaults">Obnovit do výchozího nastavení</string>
@@ -415,7 +419,7 @@
     <string name="updates_setting_title">Aktualizace</string>
     <string name="events">Události</string>
     <string name="conferences">Konference</string>
-    <string name="updates_setting_description">Zobrazit oznámení s výzvou k aktualizaci aplikace, když je k dispozici nová verze</string>
+    <string name="updates_setting_description">Zobrazit oznámení s výzvou k aktualizaci aplikace, je-li k dispozici nová verze</string>
     <string name="list_view_mode">Režim zobrazení seznamu</string>
     <string name="list">Seznam</string>
     <string name="grid">Mřížka</string>
@@ -610,7 +614,7 @@
     <string name="youtube_restricted_mode_enabled_title">Zapnout \"Omezený režim YouTube\"</string>
     <string name="video_detail_by">Od %s</string>
     <string name="channel_created_by">Vytvořil %s</string>
-    <string name="detail_sub_channel_thumbnail_view_description">Miniatura avatara kanálu</string>
+    <string name="detail_sub_channel_thumbnail_view_description">Ikona kanálu</string>
     <string name="playlist_page_summary">Strana playlistů</string>
     <string name="feed_group_show_only_ungrouped_subscriptions">Ukázat jen neseskupené objednávky</string>
     <string name="no_playlist_bookmarked_yet">Zatím žádné záložky playlistů</string>
@@ -634,7 +638,7 @@
     <string name="notification_action_shuffle">Promíchat</string>
     <string name="notification_action_repeat">Opakovat</string>
     <string name="notification_actions_at_most_three">Do kompaktního oznámení lze vybrat nejvíce tři akce!</string>
-    <string name="notification_actions_summary">Upravte každou akci notifikace níže poklepáním. Pomocí zaškrtávacích políček vpravo vyberte až tři z nich, které se mají zobrazit v kompaktním oznámení.</string>
+    <string name="notification_actions_summary">Upravte každou akci oznámení níže poklepáním. Pomocí zaškrtávacích políček vpravo vyberte až tři z nich, které se mají zobrazit v kompaktním oznámení.</string>
     <string name="notification_action_4_title">Páté akční tlačítko</string>
     <string name="notification_action_3_title">Čtvrté akční tlačítko</string>
     <string name="notification_action_2_title">Třetí akční tlačítko</string>
@@ -648,6 +652,25 @@
     <string name="clear_cookie_summary">Vymazat cookies, které NewPipe uloží, po vyřešení reCAPTCHA</string>
     <string name="recaptcha_cookies_cleared">Cookies reCAPTCHA byly vymazány</string>
     <string name="clear_cookie_title">Vymazat cookies reCAPTCHA</string>
-    <string name="youtube_restricted_mode_enabled_summary">YouTube poskytuje \"Omezený režim\", který skrývá potenciální obsahy pro dospělé.</string>
-    <string name="show_age_restricted_content_summary">Zobrazit obsah, i když je patrně nevhodný pro děti, protože odkazuje na věkové omezení (např. 18+).</string>
+    <string name="youtube_restricted_mode_enabled_summary">YouTube poskytuje \"Omezený režim\", který skrývá potenciální obsahy pro dospělé</string>
+    <string name="show_age_restricted_content_summary">Zobrazit obsah, i když je patrně nevhodný pro děti, protože odkazuje na věkové omezení (např. 18+)</string>
+    <string name="notification_colorize_summary">Nechte Android přizpůsobit barvu oznámení podle hlavní barvy v miniatuře (není k dispozici na všech zařízeních)</string>
+    <string name="notification_colorize_title">Přibarvit oznámení</string>
+    <string name="show_thumbnail_summary">Použít miniaturu pro pozadí zamknuté obrazovky a oznámení</string>
+    <string name="show_thumbnail_title">Zobrazit miniaturu</string>
+    <string name="hash_channel_name">Oznámení o hašování videa</string>
+    <string name="recent">Nedávné</string>
+    <string name="msg_calculating_hash">Počítám haš</string>
+    <string name="hash_channel_description">Oznámení o postupu hašování videa</string>
+    <string name="show_meta_info_summary">Vypnout, abyste skryli rámečky s meta informací s údaji o autorovi streamu, obsahu streamu nebo požadavků hledání.</string>
+    <string name="show_meta_info_title">Zobrazit meta informaci</string>
+    <string name="chapters">Kapitoly</string>
+    <string name="description_tab_description">Popis</string>
+    <string name="comments_tab_description">Komentáře</string>
+    <string name="show_description_title">Zobrazit popis</string>
+    <string name="open_with">Otevřít s</string>
+    <string name="no_app_to_open_intent">Na Vašem zařízení není aplikace, která to umí otevřít</string>
+    <string name="related_streams_tab_description">Podobné strýmy</string>
+    <string name="show_description_summary">Vypnout pro skrytí popisu videa a doplňkové informace</string>
+    <string name="crash_the_app">Zbořit aplikaci</string>
 </resources>

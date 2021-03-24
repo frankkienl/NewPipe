@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Mauricio Colli <mauriciocolli@outlook.com>
- * Extractors.java is part of NewPipe
+ * ExtractorHelper.java is part of NewPipe
  *
  * License: GPL-3.0+
  * This program is free software: you can redistribute it and/or modify
@@ -20,44 +20,43 @@
 package org.schabi.newpipe.util;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.core.text.HtmlCompat;
+import androidx.preference.PreferenceManager;
 
 import org.schabi.newpipe.MainActivity;
 import org.schabi.newpipe.R;
-import org.schabi.newpipe.ReCaptchaActivity;
 import org.schabi.newpipe.extractor.Info;
 import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.extractor.ListExtractor.InfoItemsPage;
 import org.schabi.newpipe.extractor.ListInfo;
+import org.schabi.newpipe.extractor.MetaInfo;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.Page;
 import org.schabi.newpipe.extractor.StreamingService;
 import org.schabi.newpipe.extractor.channel.ChannelInfo;
 import org.schabi.newpipe.extractor.comments.CommentsInfo;
-import org.schabi.newpipe.extractor.exceptions.ContentNotAvailableException;
-import org.schabi.newpipe.extractor.exceptions.ContentNotSupportedException;
-import org.schabi.newpipe.extractor.exceptions.ParsingException;
-import org.schabi.newpipe.extractor.exceptions.ReCaptchaException;
 import org.schabi.newpipe.extractor.feed.FeedExtractor;
 import org.schabi.newpipe.extractor.feed.FeedInfo;
 import org.schabi.newpipe.extractor.kiosk.KioskInfo;
 import org.schabi.newpipe.extractor.playlist.PlaylistInfo;
 import org.schabi.newpipe.extractor.search.SearchInfo;
-import org.schabi.newpipe.extractor.services.youtube.extractors.YoutubeStreamExtractor;
 import org.schabi.newpipe.extractor.stream.StreamInfo;
 import org.schabi.newpipe.extractor.stream.StreamInfoItem;
 import org.schabi.newpipe.extractor.suggestion.SuggestionExtractor;
-import org.schabi.newpipe.report.ErrorActivity;
-import org.schabi.newpipe.report.UserAction;
 
 import java.util.Collections;
 import java.util.List;
 
-import io.reactivex.Maybe;
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.Disposable;
+
+import static org.schabi.newpipe.extractor.utils.Utils.isNullOrEmpty;
 
 public final class ExtractorHelper {
     private static final String TAG = ExtractorHelper.class.getSimpleName();
@@ -263,46 +262,70 @@ public final class ExtractorHelper {
     }
 
     /**
-     * A simple and general error handler that show a Toast for known exceptions,
-     * and for others, opens the report error activity with the (optional) error message.
-     *
-     * @param context              Android app context
-     * @param serviceId            the service the exception happened in
-     * @param url                  the URL where the exception happened
-     * @param exception            the exception to be handled
-     * @param userAction           the action of the user that caused the exception
-     * @param optionalErrorMessage the optional error message
+     * Formats the text contained in the meta info list as HTML and puts it into the text view,
+     * while also making the separator visible. If the list is null or empty, or the user chose not
+     * to see meta information, both the text view and the separator are hidden
+     * @param metaInfos a list of meta information, can be null or empty
+     * @param metaInfoTextView the text view in which to show the formatted HTML
+     * @param metaInfoSeparator another view to be shown or hidden accordingly to the text view
+     * @return a disposable to be stored somewhere and disposed when activity/fragment is destroyed
      */
-    public static void handleGeneralException(final Context context, final int serviceId,
-                                              final String url, final Throwable exception,
-                                              final UserAction userAction,
-                                              final String optionalErrorMessage) {
-        final Handler handler = new Handler(context.getMainLooper());
+    public static Disposable showMetaInfoInTextView(@Nullable final List<MetaInfo> metaInfos,
+                                                    final TextView metaInfoTextView,
+                                                    final View metaInfoSeparator) {
+        final Context context = metaInfoTextView.getContext();
+        if (metaInfos == null || metaInfos.isEmpty()
+                || !PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+                        context.getString(R.string.show_meta_info_key), true)) {
+            metaInfoTextView.setVisibility(View.GONE);
+            metaInfoSeparator.setVisibility(View.GONE);
+            return Disposable.empty();
 
-        handler.post(() -> {
-            if (exception instanceof ReCaptchaException) {
-                Toast.makeText(context, R.string.recaptcha_request_toast, Toast.LENGTH_LONG).show();
-                // Starting ReCaptcha Challenge Activity
-                final Intent intent = new Intent(context, ReCaptchaActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            } else if (ExceptionUtils.isNetworkRelated(exception)) {
-                Toast.makeText(context, R.string.network_error, Toast.LENGTH_LONG).show();
-            } else if (exception instanceof ContentNotAvailableException) {
-                Toast.makeText(context, R.string.content_not_available, Toast.LENGTH_LONG).show();
-            } else if (exception instanceof ContentNotSupportedException) {
-                Toast.makeText(context, R.string.content_not_supported, Toast.LENGTH_LONG).show();
-            } else {
-                final int errorId = exception instanceof YoutubeStreamExtractor.DeobfuscateException
-                        ? R.string.youtube_signature_deobfuscation_error
-                        : exception instanceof ParsingException
-                        ? R.string.parsing_error : R.string.general_error;
-                ErrorActivity.reportError(handler, context, exception, MainActivity.class, null,
-                        ErrorActivity.ErrorInfo.make(userAction, serviceId == -1 ? "none"
-                                : NewPipe.getNameOfService(serviceId),
-                                url + (optionalErrorMessage == null ? ""
-                                        : optionalErrorMessage), errorId));
+        } else {
+            final StringBuilder stringBuilder = new StringBuilder();
+            for (final MetaInfo metaInfo : metaInfos) {
+                if (!isNullOrEmpty(metaInfo.getTitle())) {
+                    stringBuilder.append("<b>").append(metaInfo.getTitle()).append("</b>")
+                            .append(Localization.DOT_SEPARATOR);
+                }
+
+                String content = metaInfo.getContent().getContent().trim();
+                if (content.endsWith(".")) {
+                    content = content.substring(0, content.length() - 1); // remove . at end
+                }
+                stringBuilder.append(content);
+
+                for (int i = 0; i < metaInfo.getUrls().size(); i++) {
+                    if (i == 0) {
+                        stringBuilder.append(Localization.DOT_SEPARATOR);
+                    } else {
+                        stringBuilder.append("<br/><br/>");
+                    }
+
+                    stringBuilder
+                            .append("<a href=\"").append(metaInfo.getUrls().get(i)).append("\">")
+                            .append(capitalizeIfAllUppercase(metaInfo.getUrlTexts().get(i).trim()))
+                            .append("</a>");
+                }
             }
-        });
+
+            metaInfoSeparator.setVisibility(View.VISIBLE);
+            return TextLinkifier.createLinksFromHtmlBlock(context, stringBuilder.toString(),
+                    metaInfoTextView, HtmlCompat.FROM_HTML_SEPARATOR_LINE_BREAK_HEADING);
+        }
+    }
+
+    private static String capitalizeIfAllUppercase(final String text) {
+        for (int i = 0; i < text.length(); i++) {
+            if (Character.isLowerCase(text.charAt(i))) {
+                return text; // there is at least a lowercase letter -> not all uppercase
+            }
+        }
+
+        if (text.isEmpty()) {
+            return text;
+        } else {
+            return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
+        }
     }
 }

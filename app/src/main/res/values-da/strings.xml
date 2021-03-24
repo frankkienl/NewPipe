@@ -61,6 +61,8 @@
     <string name="light_theme_title">Lyst</string>
     <string name="dark_theme_title">Mørkt</string>
     <string name="black_theme_title">Sort</string>
+    <string name="popup_remember_size_pos_title">Husk størrelse og placering af pop op</string>
+    <string name="popup_remember_size_pos_summary">Husk sidste størrelse og placering af pop op-afspiller</string>
     <string name="use_inexact_seek_title">Brug hurtig og upræcis søgning</string>
     <string name="use_inexact_seek_summary">Upræcis søgning lader afspilleren finde placeringer hurtigere, men mindre præcist</string>
     <string name="download_thumbnail_title">Indlæs miniaturebilleder</string>
@@ -129,7 +131,6 @@
     <string name="filter">Filtrer</string>
     <string name="refresh">Genindlæs</string>
     <string name="clear">Slet</string>
-    <string name="popup_resizing_indicator_title">Ændrer størrelse</string>
     <string name="best_resolution">Bedste opløsning</string>
     <string name="undo">Fortryd</string>
     <string name="file_deleted">Fil slettet</string>
@@ -462,4 +463,5 @@
     <string name="notification_action_1_title">Andre handlingstast</string>
     <string name="notification_action_2_title">Tredje handlingstast</string>
     <string name="search_showing_result_for">Viser resultater for: %s</string>
+    <string name="open_with">Åben med</string>
 </resources>

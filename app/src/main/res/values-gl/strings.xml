@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_bg_subtitle">Toque en \"Buscar\" para comezar</string>
+    <string name="main_bg_subtitle">Toque en \"Buscar\" para comezar
+\n</string>
     <string name="view_count_text">%1$s visualizacións</string>
     <string name="upload_date_text">Publicado o día %1$s</string>
     <string name="no_player_found">Non foi encontrado ningún reprodutor. Quere instalar o VLC\?</string>
@@ -14,7 +15,7 @@
     <string name="controls_download_desc">Descargar o ficheiro de transmisión</string>
     <string name="search">Procurar</string>
     <string name="settings">Opcións</string>
-    <string name="did_you_mean">Non querería dicir %1$s\?</string>
+    <string name="did_you_mean">Non querería dicir \"%1$s\"\?</string>
     <string name="share_dialog_title">Compartillar con</string>
     <string name="choose_browser">Escoller un navegador</string>
     <string name="screen_rotation">rotación</string>
@@ -58,6 +59,8 @@
     <string name="light_theme_title">Claro</string>
     <string name="dark_theme_title">Escuro</string>
     <string name="black_theme_title">Negro</string>
+    <string name="popup_remember_size_pos_title">Lembrar o tamaño e a posición do «popup»</string>
+    <string name="popup_remember_size_pos_summary">Lembrar o tamaño e a posición anteriores do «popup»</string>
     <string name="use_inexact_seek_title">Usar un salto inexacto mais inexacto</string>
     <string name="use_inexact_seek_summary">Busca incorrecta permite ao xogador buscar posicións máis rápidas con precisión reducida. A busca de 5, 15 ou 25 segundos non funciona con isto.</string>
     <string name="download_thumbnail_title">Carregar miniaturas</string>
@@ -116,7 +119,6 @@
     <string name="filter">Filtro</string>
     <string name="refresh">Actualizar</string>
     <string name="clear">Limpar</string>
-    <string name="popup_resizing_indicator_title">Redimensionando</string>
     <string name="best_resolution">Mellor resolución</string>
     <string name="undo">Desfacer</string>
     <string name="play_all">Reproducilos todos</string>
@@ -608,4 +610,14 @@
     <string name="tab_new">Nova lapela</string>
     <string name="unsubscribe">Darse de baixa</string>
     <string name="search_showing_result_for">Amosando resultados para: %s</string>
+    <string name="notification_action_buffering">Procesando</string>
+    <string name="notification_action_repeat">Repetir</string>
+    <string name="notification_actions_at_most_three">Podes seleccionar como máximo tres accións para amosar na notificación compacta!</string>
+    <string name="notification_action_0_title">Primeiro botón de acción</string>
+    <string name="notification_action_1_title">Segundo botón de acción</string>
+    <string name="notification_action_2_title">Terceiro botón de acción</string>
+    <string name="notification_action_3_title">Cuarto botón de acción</string>
+    <string name="notification_action_4_title">Quinto botón de acción</string>
+    <string name="notification_scale_to_square_image_summary">Escalar a miniatura do vídeo amosado na notificación da relación de aspecto 16:9 a 1:1 (pode intruducir distorsións)</string>
+    <string name="notification_scale_to_square_image_title">Escala miniatura á relación de aspecto 1:1</string>
 </resources>

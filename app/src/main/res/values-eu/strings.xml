@@ -39,7 +39,7 @@
     <string name="use_external_video_player_title">Erabili kanpo bideo-erreproduzigailua</string>
     <string name="use_external_audio_player_title">Erabili kanpo audio-erreproduzigailua</string>
     <string name="background_player_playing_toast">Atzeko planoan erreproduzitzen</string>
-    <string name="main_bg_subtitle">\"Bilatu\" sakatu hasteko
+    <string name="main_bg_subtitle">Sakatu \"Bilatu\" hasteko
 \n</string>
     <string name="download_path_audio_title">Audioa deskargatzeko karpeta</string>
     <string name="download_path_audio_dialog_title">Aukeratu audio fitxategiak deskargatzeko karpeta</string>
@@ -60,6 +60,8 @@
     <string name="default_video_format_title">Hobetsitako bideo-formatua</string>
     <string name="theme_title">Gaia</string>
     <string name="black_theme_title">Beltza</string>
+    <string name="popup_remember_size_pos_title">Gogoratu laster-leihoaren tamaina eta posizioa</string>
+    <string name="popup_remember_size_pos_summary">Gogoratu laster-leihoaren azken tamaina eta posizioa</string>
     <string name="player_gesture_controls_title">Erreproduzigailuaren keinu bidezko kontrola</string>
     <string name="player_gesture_controls_summary">Erabili keinuak erreproduzigailuaren distira eta bolumena kontrolatzeko</string>
     <string name="show_search_suggestions_title">Bilaketa-iradokizunak</string>
@@ -81,7 +83,6 @@
     <string name="filter">Iragazkia</string>
     <string name="refresh">Freskatu</string>
     <string name="clear">Garbitu</string>
-    <string name="popup_resizing_indicator_title">Tamainaz aldatzen</string>
     <string name="best_resolution">Bereizmen onena</string>
     <string name="general_error">Errorea</string>
     <string name="network_error">Sare-errorea</string>
@@ -276,8 +277,8 @@
     <string name="file">Fitxategia</string>
     <string name="import_data_title">Inportatu datu-basea</string>
     <string name="export_data_title">Esportatu datu-basea</string>
-    <string name="import_data_summary">Zure uneko historiala eta harpidetzak gainidazten ditu</string>
-    <string name="export_data_summary">Esportatu historiala, harpidetzak eta erreprodukzio-zerrendak</string>
+    <string name="import_data_summary">Zure uneko historiala, harpidetzak eta (aukeran) ezarpenak gainidazten ditu</string>
+    <string name="export_data_summary">Esportatu historiala, harpidetzak, erreprodukzio-zerrendak eta ezarpenak</string>
     <string name="clear_views_history_title">Garbitu ikusitakoaren historiala</string>
     <string name="clear_views_history_summary">Jotako jarioen historiala eta erreprodukzio puntuak ezabatzen ditu</string>
     <string name="delete_view_history_alert">Ezabatu ikusitakoaren historia osoa\?</string>
@@ -345,11 +346,14 @@
     <string name="previous_export">Aurreko esportazioa</string>
     <string name="subscriptions_import_unsuccessful">Ezin izan dira harpidetzak inportatu</string>
     <string name="subscriptions_export_unsuccessful">Ezin izan dira harpidetzak esportatu</string>
-    <string name="import_youtube_instructions">Inporttu YouTube harpidetzak esportazio fitxategia deskargatuz:
+    <string name="import_youtube_instructions">Inportatu YouTube harpidetzak Google takeoutetik:
 \n
 \n1. Joan URL honetara: %1$s
 \n2. Hasi saioa eskatzen zaizunean
-\n3. Esportazio fitxategiaren deskarga hasi beharko litzateke</string>
+\n3. Hautatu \"Datu guztiak barne\", gero \"Kendu hautapen guztiak\", eta hautatu \"harpidetzak\" soilik eta egin klik \"Ados\" botoian
+\n4. Egin klik \"Hurrengo pausua\"-n eta \"Sortu esportazioa\"
+\n5. Egin klik \"Deskargatu\" botoian agertzen denean eta
+\n6. Erauzi .json fitxategia deskargatutako takeout zip-etik (normalean \"Youtube eta Youtube Music/harpidetzak/harpidetzak.json\") eta inportatu ezazu hemen.</string>
     <string name="import_soundcloud_instructions">Inportatu SoundCloud profila URL-a edo zure ID-a idatziz:
 \n
 \n1. Gaitu \"mahaigain modua\" web nabigatzailean (gunea ez dabil mugikorretan)
@@ -613,8 +617,8 @@
     <string name="clear_cookie_summary">reCAPTCHA bat egiten duzunean NewPipe-k gordetzen dituen kookiak ezabatu</string>
     <string name="recaptcha_cookies_cleared">reCAPTCHA kookiak garbitu dira</string>
     <string name="clear_cookie_title">Ezabatu reCAPTCHA-ren kookiak</string>
-    <string name="show_age_restricted_content_summary">Adinez mugatuta dagoen eta haurrentzako desegokia izan daitezkeen edukia erakutsi (+18 adibidez).</string>
-    <string name="youtube_restricted_mode_enabled_summary">YouTube-ren \"Modu Murriztua\" helduentzako edukia izan daitekeen edukia ezkutatzen du.</string>
+    <string name="show_age_restricted_content_summary">Adinez mugatuta dagoen eta haurrentzako desegokia izan daitezkeen edukia erakutsi (+18 adibidez)</string>
+    <string name="youtube_restricted_mode_enabled_summary">YouTube-ren \"Modu Murriztua\" helduentzako edukia izan daitekeen edukia ezkutatzen du</string>
     <string name="youtube_restricted_mode_enabled_title">Piztu YouTube-ren \"Modu Murriztua\"</string>
     <string name="settings_category_notification_title">Jakinarazpena</string>
     <string name="unsupported_url_dialog_message">Ezin izan da URL-a ezagutu. Beste aplikazio batekin ireki\?</string>
@@ -623,7 +627,7 @@
     <string name="clear_queue_confirmation_summary">Erreproduzitzaile batetik beste batera aldatzeak ilara ordezkatu dezake</string>
     <string name="clear_queue_confirmation_title">Konfirmazioa eskatu ilaratik ezabatu baino lehenago</string>
     <string name="notification_action_nothing">Ezer ez</string>
-    <string name="notification_action_buffering">Buffering</string>
+    <string name="notification_action_buffering">Buferreratzen</string>
     <string name="notification_action_shuffle">Aleatorio</string>
     <string name="notification_actions_at_most_three">Gehienez hiru ekintza aukera ditzakezu jakinarazpenean erakusteko!</string>
     <string name="notification_action_repeat">Errepikatu</string>
@@ -640,4 +644,22 @@
     <string name="show_original_time_ago_summary">Zerbitzuen jatorrizko testuak transmisioko elementuetan ikusgai egongo dira</string>
     <string name="show_original_time_ago_title">Erakutsi «orain dela» jatorrizko denbora elementuetan</string>
     <string name="notification_actions_summary">Editatu beheko jakinarazpen ekintza bakoitza gainean sakatuz. Hautatu horietako hiru gehienez jakinarazpen trinkoan erakusteko eskuineko kontrol laukiak erabiliz.</string>
+    <string name="notification_colorize_summary">Androidek miniaturako kolore nagusiaren arabera jakinarazpenaren kolorea pertsonalizatzea baimendu (kontuan izan ez dagoela gailu guztietan erabilgarri)</string>
+    <string name="notification_colorize_title">Koloreztatu jakinarazpena</string>
+    <string name="show_thumbnail_summary">Erabili miniatura blokeo pantaila eta jakinarazpenentzako</string>
+    <string name="show_thumbnail_title">Erakutsi miniatura</string>
+    <string name="hash_channel_description">Jakinarazpenak bideoen hashing egoerarako</string>
+    <string name="hash_channel_name">Bideo hash jakinarazpena</string>
+    <string name="msg_calculating_hash">Hash-a kalkulatzen</string>
+    <string name="recent">Azkenak</string>
+    <string name="show_meta_info_summary">Desgaitu jario sortzailearen informazio gehigarria, jarioaren edukia edo bilaketa eskaera duten informazio koadroak ezkutatzeko.</string>
+    <string name="show_meta_info_title">Erakutsi meta informazioa</string>
+    <string name="no_app_to_open_intent">Ez dago zure gailuan hau ireki dezakeen aplikaziorik</string>
+    <string name="chapters">Kapituluak</string>
+    <string name="description_tab_description">Deskribapena</string>
+    <string name="related_streams_tab_description">Erlazionatutako jarioak</string>
+    <string name="comments_tab_description">Iruzkinak</string>
+    <string name="show_description_summary">Desaktibatu bideoaren deskribapena eta informazio gehigarria ezkutatzeko</string>
+    <string name="show_description_title">Erakutsi deskribapena</string>
+    <string name="open_with">Ireki honekin...</string>
 </resources>

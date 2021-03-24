@@ -124,6 +124,8 @@
     <string name="show_higher_resolutions_summary">Лише деякі пристрої можуть відтворювати 2K/4K-відео</string>
     <string name="show_higher_resolutions_title">Показувати вищі роздільні здатності</string>
     <string name="default_video_format_title">Типовий формат відео</string>
+    <string name="popup_remember_size_pos_title">Пам\'ятати розмір і позицію вікна</string>
+    <string name="popup_remember_size_pos_summary">Пам\'ятати останній розмір і позицію вікна</string>
     <string name="player_gesture_controls_title">Жести керування програвачем</string>
     <string name="player_gesture_controls_summary">Контролювати яскравость та гучність програвача жестами</string>
     <string name="show_search_suggestions_title">Пошукові пропозиції</string>
@@ -153,7 +155,6 @@
     <string name="filter">Фільтр</string>
     <string name="refresh">Оновити</string>
     <string name="clear">Очистити</string>
-    <string name="popup_resizing_indicator_title">Зміна розміру</string>
     <string name="best_resolution">Найкраща роздільна здатність</string>
     <string name="undo">Скасувати</string>
     <string name="play_all">Грати все</string>
@@ -629,4 +630,5 @@
     <string name="notification_action_1_title">Кнопка другої дії</string>
     <string name="notification_action_0_title">Кнопка першої дії</string>
     <string name="notification_scale_to_square_image_title">Збільшити мініатюру до масштабу 1:1</string>
+    <string name="open_with">Відкрити за допомогою</string>
 </resources>

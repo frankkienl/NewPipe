@@ -1,6 +1,5 @@
 package org.schabi.newpipe.fragments.list.comments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,35 +11,33 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.error.UserAction;
 import org.schabi.newpipe.extractor.ListExtractor;
-import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.comments.CommentsInfo;
 import org.schabi.newpipe.fragments.list.BaseListInfoFragment;
-import org.schabi.newpipe.report.UserAction;
-import org.schabi.newpipe.util.AnimationUtils;
+import org.schabi.newpipe.ktx.ViewUtils;
 import org.schabi.newpipe.util.ExtractorHelper;
 
-import io.reactivex.Single;
-import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class CommentsFragment extends BaseListInfoFragment<CommentsInfo> {
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public static CommentsFragment getInstance(final int serviceId, final  String url,
+    public static CommentsFragment getInstance(final int serviceId, final String url,
                                                final String name) {
         final CommentsFragment instance = new CommentsFragment();
         instance.setInitialData(serviceId, url, name);
         return instance;
     }
 
+    public CommentsFragment() {
+        super(UserAction.REQUESTED_COMMENTS);
+    }
+
     /*//////////////////////////////////////////////////////////////////////////
     // LifeCycle
     //////////////////////////////////////////////////////////////////////////*/
-
-    @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-    }
 
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater,
@@ -52,9 +49,7 @@ public class CommentsFragment extends BaseListInfoFragment<CommentsInfo> {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (disposables != null) {
-            disposables.clear();
-        }
+        disposables.clear();
     }
 
     /*//////////////////////////////////////////////////////////////////////////
@@ -76,51 +71,10 @@ public class CommentsFragment extends BaseListInfoFragment<CommentsInfo> {
     //////////////////////////////////////////////////////////////////////////*/
 
     @Override
-    public void showLoading() {
-        super.showLoading();
-    }
-
-    @Override
     public void handleResult(@NonNull final CommentsInfo result) {
         super.handleResult(result);
-
-        AnimationUtils.slideUp(requireView(), 120, 150, 0.06f);
-
-        if (!result.getErrors().isEmpty()) {
-            showSnackBarError(result.getErrors(), UserAction.REQUESTED_COMMENTS,
-                    NewPipe.getNameOfService(result.getServiceId()), result.getUrl(), 0);
-        }
-
-        if (disposables != null) {
-            disposables.clear();
-        }
-    }
-
-    @Override
-    public void handleNextItems(final ListExtractor.InfoItemsPage result) {
-        super.handleNextItems(result);
-
-        if (!result.getErrors().isEmpty()) {
-            showSnackBarError(result.getErrors(), UserAction.REQUESTED_COMMENTS,
-                    NewPipe.getNameOfService(serviceId), "Get next page of: " + url,
-                    R.string.general_error);
-        }
-    }
-
-    /*//////////////////////////////////////////////////////////////////////////
-    // OnError
-    //////////////////////////////////////////////////////////////////////////*/
-
-    @Override
-    protected boolean onError(final Throwable exception) {
-        if (super.onError(exception)) {
-            return true;
-        }
-
-        hideLoading();
-        showSnackBarError(exception, UserAction.REQUESTED_COMMENTS,
-                NewPipe.getNameOfService(serviceId), url, R.string.error_unable_to_load_comments);
-        return true;
+        ViewUtils.slideUp(requireView(), 120, 150, 0.06f);
+        disposables.clear();
     }
 
     /*//////////////////////////////////////////////////////////////////////////
