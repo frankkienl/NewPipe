@@ -24,17 +24,18 @@ import org.schabi.newpipe.database.LocalItem;
 import org.schabi.newpipe.database.playlist.PlaylistLocalItem;
 import org.schabi.newpipe.database.playlist.PlaylistMetadataEntry;
 import org.schabi.newpipe.database.playlist.model.PlaylistRemoteEntity;
+import org.schabi.newpipe.error.ErrorActivity;
+import org.schabi.newpipe.error.ErrorInfo;
+import org.schabi.newpipe.error.UserAction;
 import org.schabi.newpipe.local.playlist.LocalPlaylistManager;
 import org.schabi.newpipe.local.playlist.RemotePlaylistManager;
-import org.schabi.newpipe.report.ErrorActivity;
-import org.schabi.newpipe.report.UserAction;
 
 import java.util.List;
 import java.util.Vector;
 
-import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class SelectPlaylistFragment extends DialogFragment {
     /**
@@ -114,8 +115,8 @@ public class SelectPlaylistFragment extends DialogFragment {
 
     protected void onError(final Throwable e) {
         final Activity activity = requireActivity();
-        ErrorActivity.reportError(activity, e, activity.getClass(), null, ErrorActivity.ErrorInfo
-                .make(UserAction.UI_ERROR, "none", "load_playlists", R.string.app_ui_crash));
+        ErrorActivity.reportErrorInSnackbar(activity, new ErrorInfo(e,
+                UserAction.UI_ERROR, "Loading playlists"));
     }
 
     /*//////////////////////////////////////////////////////////////////////////

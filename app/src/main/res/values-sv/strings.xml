@@ -43,6 +43,8 @@
     <string name="light_theme_title">Ljust</string>
     <string name="dark_theme_title">Mörkt</string>
     <string name="black_theme_title">Svart</string>
+    <string name="popup_remember_size_pos_title">Kom ihåg popupstorlek och position</string>
+    <string name="popup_remember_size_pos_summary">Kom ihåg popup-rutans senaste storlek och position</string>
     <string name="player_gesture_controls_title">Gestkontroller för spelare</string>
     <string name="player_gesture_controls_summary">Använd gester för att kontrollera spelarens ljusstyrka och volym</string>
     <string name="show_search_suggestions_title">Sökförslag</string>
@@ -117,7 +119,6 @@
     <string name="background_player_append">Tillagd till bakgrunds-spelar kön</string>
     <string name="popup_playing_append">Tillagd till popup-spelar kön</string>
     <string name="playlist">Spellista</string>
-    <string name="popup_resizing_indicator_title">Storleksändring</string>
     <string name="undo">Ångra</string>
     <string name="play_all">Spela Alla</string>
     <string name="notification_channel_name">NewPipe Avisering</string>

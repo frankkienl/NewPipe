@@ -29,13 +29,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.database.subscription.SubscriptionEntity;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.channel.ChannelInfo;
 import org.schabi.newpipe.extractor.subscription.SubscriptionItem;
+import org.schabi.newpipe.ktx.ExceptionUtils;
 import org.schabi.newpipe.util.Constants;
-import org.schabi.newpipe.util.ExceptionUtils;
 import org.schabi.newpipe.util.ExtractorHelper;
 
 import java.io.File;
@@ -46,12 +47,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Flowable;
-import io.reactivex.Notification;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Notification;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static org.schabi.newpipe.MainActivity.DEBUG;
 
@@ -66,7 +67,7 @@ public class SubscriptionsImportService extends BaseImportExportService {
      * A {@link LocalBroadcastManager local broadcast} will be made with this action
      * when the import is successfully completed.
      */
-    public static final String IMPORT_COMPLETE_ACTION = "org.schabi.newpipe.local.subscription"
+    public static final String IMPORT_COMPLETE_ACTION = App.PACKAGE_NAME + ".local.subscription"
             + ".services.SubscriptionsImportService.IMPORT_COMPLETE";
 
     /**

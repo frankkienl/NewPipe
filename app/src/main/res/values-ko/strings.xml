@@ -50,7 +50,8 @@
     <string name="use_tor_summary">(실험적) 향상된 프라이버시를 위해 다운로드 트래픽을 강제로 Tor를 통해 전송 (스트리밍 비디오는 아직 지원되지 않습니다).</string>
     <string name="err_dir_create">다운로드 디렉토리를 만들 수 없습니다 \'%1$s\'</string>
     <string name="info_dir_created">다운로드 디렉토리를 만들었습니다 \'%1$s\'</string>
-    <string name="main_bg_subtitle">검색 버튼을 눌러서 시작하세요</string>
+    <string name="main_bg_subtitle">\"검색\" 버튼을 눌러서 시작하세요
+\n</string>
     <string name="autoplay_by_calling_app_title">자동재생</string>
     <string name="autoplay_by_calling_app_summary">NewPipe가 다른 앱에서 호출되었을 때 동영상을 재생합니다</string>
     <string name="content">컨텐츠</string>
@@ -103,6 +104,8 @@
     <string name="show_higher_resolutions_summary">일부 기기에서만 2K/4K 해상도 재생이 지원됩니다</string>
     <string name="default_video_format_title">기본 비디오 형식</string>
     <string name="black_theme_title">검은 테마</string>
+    <string name="popup_remember_size_pos_title">팝업 크기 및 위치 기억</string>
+    <string name="popup_remember_size_pos_summary">마지막으로 사용한 팝업 위치 및 크기를 기억합니다</string>
     <string name="player_gesture_controls_title">제스처 재생 조작</string>
     <string name="player_gesture_controls_summary">제스처를 사용해 화면 밝기와 음량을 조절합니다</string>
     <string name="show_search_suggestions_title">검색 제안</string>
@@ -132,7 +135,6 @@
     <string name="filter">필터</string>
     <string name="refresh">새로고침</string>
     <string name="clear">지우기</string>
-    <string name="popup_resizing_indicator_title">크기 조절</string>
     <string name="best_resolution">최대 해상도</string>
     <string name="undo">되돌리기</string>
     <string name="play_all">전부 재생</string>
@@ -320,11 +322,14 @@
     <string name="previous_export">이전 내보내기</string>
     <string name="subscriptions_import_unsuccessful">구독 목록 가져오기 실패</string>
     <string name="subscriptions_export_unsuccessful">구독 목록 내보내기 실패</string>
-    <string name="import_youtube_instructions">\'YouTube 구독 파일\'을 다운로드해서 구독 목록을 가져올 수 있습니다: 
-\n 
-\n1. 이곳으로 가세요: %1$s 
-\n2. 요청에 따라 로그인을 진행합니다 
-\n3. 다운로드가 곧 시작 됩니다 (이 파일이 구독 파일입니다)</string>
+    <string name="import_youtube_instructions">Google 테이크아웃을 통해 YouTube 구독 목록을 가져올 수 있습니다:
+\n
+\n1. 이곳으로 가세요: %1$s
+\n2. 요청에 따라 로그인을 진행합니다
+\n3. \"모든 데이터 포함됨\"을 누른 뒤 \"모두 선택 해제\"를 누릅니다. 그 다음 \"구독정보\"를 선택하고 \"확인\"을 누릅니다
+\n4. \"다음 단계\"를 누르고 \"내보내기 생성\"을 선택합니다
+\n5. \"다운로드\" 버튼을 눌러 다운로드 한 후
+\n6. 테이크아웃 ZIP파일을 압축해제 하여 .json 파일 (일반적으로 \"YouTube 및 YouTube Music/구독/구독.json\")을 받고 가져옵니다.</string>
     <string name="import_soundcloud_instructions">SoundCloud 프로필을 가져오시려면 URL 및 ID를 입력해주세요. 
 \n 
 \n프로필 URL을 찾으시려면 다음 과정을 따라해 주세요. 
@@ -448,7 +453,7 @@
     <string name="pause_downloads_on_mobile_desc">모바일 데이터로 전환될 때, 일부 다운로드는 정지되지 않습니다</string>
     <string name="conferences">컨퍼런스</string>
     <string name="show_comments_title">댓글 보기</string>
-    <string name="show_comments_summary">댓글을 보지 않으려면 비활성화하세요</string>
+    <string name="show_comments_summary">댓글 숨기기</string>
     <string name="autoplay_title">자동 재생</string>
     <string name="no_comments">댓글 없음</string>
     <string name="error_unable_to_load_comments">댓글을 불러올 수 없음</string>
@@ -546,4 +551,36 @@
     <string name="notification_scale_to_square_image_summary">알림에 표시되는 비디오 썸네일을 16:9에서 1:1 비율로 바꿉니다. (왜곡이 생길 수도 있습니다.)</string>
     <string name="notification_scale_to_square_image_title">썸네일을 1:1 비율로 하기</string>
     <string name="search_showing_result_for">%s에 대한 검색 결과</string>
+    <string name="notification_action_shuffle">셔플</string>
+    <string name="notification_action_repeat">연속 재생</string>
+    <string name="playlist_page_summary">재생목록 페이지</string>
+    <string name="show_thumbnail_title">썸네일 보기</string>
+    <string name="feed_group_dialog_empty_name">그룹 이름이 없음</string>
+    <plurals name="days">
+        <item quantity="other">%d 일</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="other">%d 시간</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="other">%d 분</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%d 초</item>
+    </plurals>
+    <string name="remove_watched_popup_title">시청 기록을 지우겠습니까\?</string>
+    <string name="remove_watched">시청 기록 지우기</string>
+    <string name="title_activity_play_queue">재생목록 실행</string>
+    <string name="settings_category_notification_title">알림</string>
+    <string name="unsupported_url_dialog_message">URL을 인식할 수 없습니다. 다른 앱으로 여시겠습니까\?</string>
+    <string name="clear_queue_confirmation_title">스트림을 비우기 전 확인을 요청합니다.</string>
+    <string name="notification_colorize_summary">안드로이드에서 썸네일의 색상에 따라 알림 색상을 조절합니다. (지원되지 않는 기기가 있을 수 있습니다.)</string>
+    <string name="notification_action_buffering">버퍼링</string>
+    <string name="notification_action_4_title">다섯번째 버튼</string>
+    <string name="notification_action_3_title">네번째 버튼</string>
+    <string name="notification_action_2_title">세번째 버튼</string>
+    <string name="notification_action_1_title">두번째 버튼</string>
+    <string name="permission_display_over_apps">다른 앱 위에 표시되는 권한 부여</string>
+    <string name="show_meta_info_title">메타 정보 표시</string>
+    <string name="notification_colorize_title">색상화된 알림</string>
 </resources>

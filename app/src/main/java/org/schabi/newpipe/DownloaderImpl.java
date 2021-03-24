@@ -2,11 +2,12 @@ package org.schabi.newpipe;
 
 import android.content.Context;
 import android.os.Build;
-import androidx.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
+import org.schabi.newpipe.error.ReCaptchaActivity;
 import org.schabi.newpipe.extractor.downloader.Downloader;
 import org.schabi.newpipe.extractor.downloader.Request;
 import org.schabi.newpipe.extractor.downloader.Response;
@@ -50,8 +51,8 @@ public final class DownloaderImpl extends Downloader {
     public static final String YOUTUBE_DOMAIN = "youtube.com";
 
     private static DownloaderImpl instance;
-    private Map<String, String> mCookies;
-    private OkHttpClient client;
+    private final Map<String, String> mCookies;
+    private final OkHttpClient client;
 
     private DownloaderImpl(final OkHttpClient.Builder builder) {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {

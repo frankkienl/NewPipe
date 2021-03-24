@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_bg_subtitle">Dodirnite pretragu za početak
+    <string name="main_bg_subtitle">Za početak dodirnite \"Pretraži\"
 \n</string>
     <string name="view_count_text">%1$s pregleda</string>
     <string name="upload_date_text">Objavljeno %1$s</string>
@@ -18,7 +18,7 @@
     <string name="choose_browser">Izaberi pretraživač</string>
     <string name="screen_rotation">rotacija</string>
     <string name="use_external_video_player_title">Koristi vanjski reproduktor videozapisa</string>
-    <string name="use_external_video_player_summary">Uklanja zvuk na nekim rezolucijama</string>
+    <string name="use_external_video_player_summary">Uklanja zvuk pri nekim rezolucijama</string>
     <string name="use_external_audio_player_title">Koristi vanjski reproduktor za zvuk</string>
     <string name="popup_mode_share_menu_title">Skočni prozor</string>
     <string name="subscribe_button_title">Pretplati se</string>
@@ -39,9 +39,9 @@
     <string name="download_path_audio_dialog_title">Odaberi mapu za preuzimanje audio datoteka</string>
     <string name="autoplay_by_calling_app_title">Automatska reprodukcija</string>
     <string name="autoplay_by_calling_app_summary">Reproducira videozapis kad je NewPipe pozvan iz druge aplikacije</string>
-    <string name="default_resolution_title">Zadana razlučivost</string>
-    <string name="default_popup_resolution_title">Zadana razlučivost skočnog prozora</string>
-    <string name="show_higher_resolutions_title">Prikaži veće razlučivosti</string>
+    <string name="default_resolution_title">Standardna rezolucija</string>
+    <string name="default_popup_resolution_title">Standardna rezolucija skočnog prozora</string>
+    <string name="show_higher_resolutions_title">Prikaži više rezolucije</string>
     <string name="show_higher_resolutions_summary">Samo neki uređaji podržavaju reprodukciju 2K/4K videozapisa</string>
     <string name="play_with_kodi_title">Reproduciraj sa Kodijem</string>
     <string name="kore_not_found">Kore aplikacija nije pronađena. Želite li ju instalirati?</string>
@@ -54,6 +54,8 @@
     <string name="light_theme_title">Svijetla</string>
     <string name="dark_theme_title">Tamna</string>
     <string name="black_theme_title">Crna</string>
+    <string name="popup_remember_size_pos_title">Zapamti veličinu i poziciju skočnog prozora</string>
+    <string name="popup_remember_size_pos_summary">Zapamti posljednju veličinu i poziciju skočnog prozora</string>
     <string name="player_gesture_controls_title">Kontroliranje reproduktora gestama</string>
     <string name="player_gesture_controls_summary">Koristi geste za kontrolu svjetline i glasnoće reproduktora</string>
     <string name="show_search_suggestions_title">Prijedlozi pri traženju</string>
@@ -88,8 +90,7 @@
     <string name="filter">Filtar</string>
     <string name="refresh">Osvježi</string>
     <string name="clear">Očisti</string>
-    <string name="popup_resizing_indicator_title">Mijenjanje veličine</string>
-    <string name="best_resolution">Najbolja razlučivost</string>
+    <string name="best_resolution">Najbolja rezolucija</string>
     <string name="general_error">Greška</string>
     <string name="network_error">Greška u mreži</string>
     <string name="could_not_load_thumbnails">Nije moguće učitati sve ikone</string>
@@ -146,7 +147,7 @@
     <string name="msg_running_detail">Dodirni za detalje</string>
     <string name="msg_wait">Molimo pričekajte…</string>
     <string name="msg_copied">Kopirano u međuspremnik</string>
-    <string name="no_available_dir">Kasnije odredite mapu za preuzimanje u postavkama</string>
+    <string name="no_available_dir">Molimo kasnije u postavkama odaberite mapu za preuzimanje</string>
     <string name="msg_popup_permission">Ova dozvola je potrebna za
 \notvaranje skočnog prozora</string>
     <string name="title_activity_recaptcha">reCAPTCHA zadatak</string>
@@ -288,15 +289,15 @@
     <string name="switch_to_main">Prijeđi na glavni</string>
     <string name="import_data_title">Uvoz baze podataka</string>
     <string name="export_data_title">Izvoz baze podataka</string>
-    <string name="import_data_summary">Poništava vašu trenutnu povijest i pretplate</string>
-    <string name="export_data_summary">Izvezi povijest, pretplate i playliste</string>
-    <string name="clear_views_history_title">Očisti povijest gledanja</string>
+    <string name="import_data_summary">Poništava vašu trenutačnu povijest, pretplate, playliste i (opcionalno) postavke</string>
+    <string name="export_data_summary">Izvezi povijest, pretplate, playliste i postavke</string>
+    <string name="clear_views_history_title">Izbriši povijest gledanja</string>
     <string name="clear_views_history_summary">Briše povijest reproduciranih streamova i pozicije reprodukcije</string>
-    <string name="delete_view_history_alert">Obriši cijelu povijest gledanja\?</string>
-    <string name="watch_history_deleted">Povijest gledanja izbrisana.</string>
-    <string name="clear_search_history_title">Obriši povijest pretraživanja</string>
-    <string name="delete_search_history_alert">Obriši cijelu povijest pretraživanja\?</string>
-    <string name="search_history_deleted">Povijest pretraživanja obrisana.</string>
+    <string name="delete_view_history_alert">Izbrisati cijelu povijest gledanja\?</string>
+    <string name="watch_history_deleted">Povijest gledanja je izbrisana.</string>
+    <string name="clear_search_history_title">Izbriši povijest pretraživanja</string>
+    <string name="delete_search_history_alert">Izbrisati cijelu povijest pretraživanja\?</string>
+    <string name="search_history_deleted">Povijest pretraživanja je izbrisana.</string>
     <string name="invalid_url_toast">Neispravan URL</string>
     <string name="invalid_directory">Nema takve mape</string>
     <string name="file_name_empty_error">Naziv datoteke ne može biti prazan</string>
@@ -333,11 +334,14 @@
     <string name="previous_export">Prethodni izvozi</string>
     <string name="subscriptions_import_unsuccessful">Nije moguće uvesti pretplatnike</string>
     <string name="subscriptions_export_unsuccessful">Nije moguće izvesti pretplatnike</string>
-    <string name="import_youtube_instructions">Uvezite YouTube pretplatnike preuzimanjem izvozne datoteke: 
-\n 
-\n1. Idite na ovaj URL: %1$s 
-\n2. Ulogirajte se 
-\n3. Preuzimanje bi trebalo početi (to je izvozna datoteka)</string>
+    <string name="import_youtube_instructions">Uvezite YouTube pretplatnike preuzimanjem izvozne datoteke Google-a:
+\n
+\n1. Idite na ovaj URL: %1$s
+\n2. Prijavite se
+\n3. Kliknite \"Uključeni svi podaci\", zatim \"Poništi odabir svih\", a zatim odaberite samo \"pretplate\" i kliknite \"U redu\"
+\n4. Kliknite na \"Nastavi\", a zatim \"Stvori izvoz\"
+\n5. Kliknite na \"Preuzmi\"
+\n6. Preuzmite zip datoteku i izvucite json datoteku (pod \"YouTube and YouTube Music/subscriptions/subscriptions.json\") pa uvezite je ovdje</string>
     <string name="import_soundcloud_instructions_hint">vašID, soundcloud.com/vašID</string>
     <string name="import_network_expensive_warning">Uzmite u obzir da ova operacija može uzrokovat veliku potrošnju prometa.
 \n
@@ -475,9 +479,9 @@
     <string name="start_downloads">Započni preuzimanja</string>
     <string name="pause_downloads">Zaustavi preuzimanja</string>
     <string name="downloads_storage_ask_title">Pitaj gdje preuzeti</string>
-    <string name="clear_playback_states_title">Obriši poziciju reprodukcije</string>
-    <string name="clear_playback_states_summary">Obriši sve pozicije reprodukcije</string>
-    <string name="delete_playback_states_alert">Obriši sve pozicije reprodukcije\?</string>
+    <string name="clear_playback_states_title">Izbriši poziciju reprodukcije</string>
+    <string name="clear_playback_states_summary">Izbriši sve pozicije reprodukcije</string>
+    <string name="delete_playback_states_alert">Izbrisati sve pozicije reprodukcije\?</string>
     <string name="no_one_watching">Nitko ne gleda</string>
     <string name="no_one_listening">Nitko ne sluša</string>
     <string name="localization_changes_requires_app_restart">Jezik će se promjeniti nakon ponovnog pokretanja aplikacije.</string>
@@ -485,7 +489,7 @@
     <string name="peertube_instance_add_https_only">Podržani su samo HTTP URL-ovi</string>
     <string name="local">Lokalno</string>
     <string name="recently_added">Nedavno dodano</string>
-    <string name="playlist_no_uploader">Automatski generirana (nije pronađen nijedan autor)</string>
+    <string name="playlist_no_uploader">Autogenerirano (prenositelj nedefiniran)</string>
     <string name="clear_download_history">Očisti povijest preuzimanja</string>
     <string name="delete_downloaded_files">Izbriši preuzete datoteke</string>
     <string name="deleted_downloads">Obrisano %1$d preuzimanja</string>
@@ -550,7 +554,7 @@
     <string name="download_choose_new_path">Promijenite mape za preuzimanje kako bi stupile na snagu</string>
     <string name="search_showing_result_for">Prikazuju se rezultati za: %s</string>
     <string name="unsupported_url_dialog_message">Nije moguće prepoznati URL. Želite li otvoriti u drugoj aplikaciji\?</string>
-    <string name="notification_scale_to_square_image_title">Promijeni omjer minijature na 1:1</string>
+    <string name="notification_scale_to_square_image_title">Smanjiti omjer minijatura na 1:1</string>
     <string name="notification_action_buffering">Učitavanje u predmemoriju</string>
     <string name="enable_queue_limit_desc">Istovremeno se pokreće jedno preuzimanje</string>
     <string name="enqueued">Dodano u popis izvođenja</string>
@@ -614,9 +618,9 @@
     <string name="restricted_video">Ovaj video je dobno ograničen.
 \n
 \nZa prikaz sadržaja uključi „%1$s” u postavkama.</string>
-    <string name="youtube_restricted_mode_enabled_summary">YouTube nudi postavku „Ograničeni način rada”, čime se skriva sadržaj za odrasle.</string>
+    <string name="youtube_restricted_mode_enabled_summary">YouTube nudi postavku „Ograničeni način rada”, čime se skriva sadržaj za odrasle</string>
     <string name="youtube_restricted_mode_enabled_title">Uključi YouTube postavku „Ograničeni način rada”</string>
-    <string name="show_age_restricted_content_summary">Prikaži sadržaj koji nije prikladan za određenu dob (kategorija 18).</string>
+    <string name="show_age_restricted_content_summary">Prikaži sadržaj koji vjerojatno nije prikladan za djecu, jer je dobno ograničen (kategorija 18)</string>
     <string name="peertube_instance_add_exists">Primjerak već postoji</string>
     <string name="peertube_instance_add_fail">Neuspjela provjera primjerka</string>
     <string name="peertube_instance_add_help">Upiši URL primjerka</string>
@@ -631,4 +635,41 @@
     <string name="error_report_open_github_notice">Provjeri je li tvoj problem već postoji. Dupla pojava problema krade nam vrijeme koje bismo mogli utrošiti na ispravljanje same greške.</string>
     <string name="notification_actions_summary">Za uređivanje obavijesti radnji, dodirni ih. Označi do tri radnje za kompaktni prikaz obavijesti.</string>
     <string name="new_seek_duration_toast">Zbog ograničenja ExoPlayera, trajanje traženja postavljeno je na %d s</string>
+    <string name="notification_colorize_summary">Neka Android prilagodi boju obavijesti prema glavnoj boji minijature (ovo nije dostupno na svim uređajima)</string>
+    <string name="notification_colorize_title">Oboji obavijest</string>
+    <string name="content_not_supported">NewPipe još ne podržava ovaj sadržaj.
+\n
+\nNadamo se da će biti podržan u budućoj verziji.</string>
+    <string name="show_thumbnail_summary">Prikaži minijaturu kao pozadinu pri zaključanom ekranu i unutar obavijesti</string>
+    <string name="show_thumbnail_title">Prikaži minijaturu</string>
+    <string name="show_original_time_ago_title">Prikaži izvorno vrijeme elemenata</string>
+    <string name="downloads_storage_use_saf_summary">„Okvir za pristup spremištu” omogućuje preuzimanje na SD karticu.
+\nNeki uređaji nisu kompatibilni</string>
+    <string name="show_original_time_ago_summary">Izvorni tekstovi usluga bit će vidljivi u elementima prijenosa</string>
+    <string name="feed_use_dedicated_fetch_method_summary">Dostupno je u nekim uslugama. Obično je puno brže, ali može vratiti ograničenu količinu predmeta i često nepotpune podatke (npr. bez trajanja, vrste predmeta, bez stanja uživo).</string>
+    <string name="feed_use_dedicated_fetch_method_help_text">Mislite li da je učitavanje feeda prespor\? Ako je to slučaj, pokušajte omogućiti brzo učitavanje (možete ga promijeniti u postavkama ili pritiskom na donji gumb).
+\n
+\nNewPipe nudi dvije strategije ulaganja feeda:
+\n• Dohvaćanje cijelog pretplatničkog kanala, koji je spor, ali cjelovit.
+\n• Korištenje namjenske krajnje točke usluge, koja je brza, ali obično nije potpuna.
+\n
+\nRazlika je u tome što brzom obično nedostaju neke informacije, poput trajanja ili vrste stavke (ne može razlikovati videozapise uživo od uobičajenih), a možda će vratiti i manje predmeta.
+\n
+\nYouTube je primjer usluge koja nudi ovaj brzi način sa svojim RSS feedom.
+\n
+\nDakle, izbor se svodi na ono što više volite: brzinu ili precizne informacije.</string>
+    <string name="msg_calculating_hash">Izračunavanje šifriranja</string>
+    <string name="hash_channel_name">Obavijest šifriranja videa</string>
+    <string name="hash_channel_description">Obavijesti o napretku šifriranja videa</string>
+    <string name="recent">Nedavni</string>
+    <string name="show_meta_info_summary">Isključi za skrivanje polja metapodataka s dodatnim podacima o autoru streama, sadržaju streama ili zahtjevu za pretraživanje.</string>
+    <string name="show_meta_info_title">Prikaži metapodatke</string>
+    <string name="related_streams_tab_description">Slični videozapisi</string>
+    <string name="no_app_to_open_intent">Nijedna aplikacija na vašem uređaju ne može to otvoriti</string>
+    <string name="chapters">Poglavlja videozapisa</string>
+    <string name="description_tab_description">Opis</string>
+    <string name="comments_tab_description">Komentari</string>
+    <string name="show_description_summary">Isključite da biste sakrili opis videozapisa i dodatne informacije</string>
+    <string name="show_description_title">Prikaži opis</string>
+    <string name="open_with">Otvorite uz pomoć aplikacije</string>
 </resources>

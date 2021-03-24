@@ -40,7 +40,6 @@
     <string name="export_data_summary">هەناردەکردنی مێژوو و بەشداربوون و لیستەکان</string>
     <string name="use_inexact_seek_summary">بردنەپێشی ناتەواوی خێرا وا لە کارپێکەرەکە داکات کە بەخێرایی شوێنەکە بگۆڕێت. بردنەپێشی ٥ یان ١٥ یان ٢٥ چرکەیی لەگەڵ ئەمەدا کارناکات.</string>
     <string name="enable_disposed_exceptions_summary">سکاڵاکردن لەسەر نەگەیاندنی Rx ی پەسەندنەکرا لە دەرەوەی پارچە یان چالاکی لەدوای پوختەکردن</string>
-    <string name="popup_resizing_indicator_title">قەبارە دانانەوە</string>
     <string name="show_next_and_similar_title">پیشاندانی ’دواتر’ و ڤیدیۆ ’هاوشێوەکان’</string>
     <string name="resize_zoom">هێنانەپێش</string>
     <string name="saved_tabs_invalid_json">پەڕە بنەڕەتییەکان بەکاردەبردرێن, ناتوانرێ پەڕە پاشەکەوتکراوەکان بخوێنرێنەوە</string>
@@ -91,6 +90,7 @@
     <string name="live_streams_not_supported">پەخشی ڕاستەوخۆ پشتگیری ناکرێ لەئێستادا</string>
     <string name="channel_unsubscribed">به‌شداریت نەما له‌ كه‌ناڵ</string>
     <string name="player_stream_failure">ناتوانرێ ئەم پەخشە کارپێبکرێ</string>
+    <string name="popup_remember_size_pos_title">بیرهاتنه‌وه‌ی شوێن و قه‌باره‌ی په‌نجه‌ره‌ی بچووک</string>
     <string name="player_recoverable_failure">گێڕانەوەی کارپێکەر بۆکاتی پێش کێشە</string>
     <string name="minimize_on_exit_none_description">هیچیان</string>
     <string name="pause_downloads_on_mobile_desc">بەسوودە بۆ کاتی گۆڕینی هێڵ بۆ داتای مۆبایل, لەگەڵ ئەوەشدا زۆربەی داگرتنەکان ڕاناگرێت</string>
@@ -341,6 +341,7 @@
     <string name="recaptcha_done_button">تەواو</string>
     <string name="detail_likes_img_view_description">بەدڵبوون</string>
     <string name="error_unable_to_load_license">ناتوانرێ مۆڵەت باربکرێ</string>
+    <string name="popup_remember_size_pos_summary">بیرهاتنه‌وه‌ی كۆتا قه‌باره‌ و شوێنی په‌نجه‌ره‌ی بچووك</string>
     <string name="create">دروستکردن</string>
     <string name="import_network_expensive_warning">ئەوە بزانە ئەم کردارە پێویستی بە هێڵێکی گران هەیە. 
 \n 
@@ -496,7 +497,8 @@
     <string name="drawer_header_description">خزمەتگوزاری چەسپاو، ئێستا هەڵبژێردراو:</string>
     <string name="delete_search_history_alert">تەواوی گەڕانەکانت بسڕدرێنەوە؟</string>
     <string name="resume_on_audio_focus_gain_summary">بەردەوام بوونی ڤیدیۆ لەدوای هەبوونی هەر بڕینێک (وەک پەیوەندی تەلەفۆنی)</string>
-    <string name="main_bg_subtitle">گرته‌ له‌ ”گه‌ڕان” بكه‌ بۆ ده‌ستپێكردن</string>
+    <string name="main_bg_subtitle">کرته‌ له‌ \"گه‌ڕان\" بكه‌ بۆ ده‌ستپێكردن
+\n</string>
     <string name="enable_search_history_summary">کۆگای گەڕانی نێوخۆیی</string>
     <string name="settings_category_video_audio_title">ڤیدیۆ وە دەنگ</string>
     <string name="share">هاوبه‌شپێكردن</string>

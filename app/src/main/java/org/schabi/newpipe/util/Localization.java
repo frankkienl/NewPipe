@@ -29,7 +29,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,14 +55,10 @@ import java.util.Locale;
 
 public final class Localization {
 
-    private static final String DOT_SEPARATOR = " • ";
+    public static final String DOT_SEPARATOR = " • ";
     private static PrettyTime prettyTime;
 
     private Localization() { }
-
-    public static void init(final Context context) {
-        initPrettyTime(context);
-    }
 
     @NonNull
     public static String concatenateStrings(final String... strings) {
@@ -306,18 +301,18 @@ public final class Localization {
     // Pretty Time
     //////////////////////////////////////////////////////////////////////////*/
 
-    private static void initPrettyTime(final Context context) {
-        prettyTime = new PrettyTime(getAppLocale(context));
+    public static void initPrettyTime(final PrettyTime time) {
+        prettyTime = time;
         // Do not use decades as YouTube doesn't either.
         prettyTime.removeUnit(Decade.class);
     }
 
-    private static PrettyTime getPrettyTime() {
-        return prettyTime;
+    public static PrettyTime resolvePrettyTime(final Context context) {
+        return new PrettyTime(getAppLocale(context));
     }
 
-    public static String relativeTime(final Calendar calendarTime) {
-        return getPrettyTime().formatUnrounded(calendarTime);
+    public static String relativeTime(final OffsetDateTime offsetDateTime) {
+        return prettyTime.formatUnrounded(offsetDateTime);
     }
 
     private static void changeAppLanguage(final Locale loc, final Resources res) {
@@ -352,5 +347,20 @@ public final class Localization {
 
     private static double round(final double value, final int places) {
         return new BigDecimal(value).setScale(places, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    /**
+     * Workaround to match normalized captions like english to English or deutsch to Deutsch.
+     * @param list the list to search into
+     * @param toFind the string to look for
+     * @return whether the string was found or not
+     */
+    public static boolean containsCaseInsensitive(final List<String> list, final String toFind) {
+        for (final String i : list) {
+            if (i.equalsIgnoreCase(toFind)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

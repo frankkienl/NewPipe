@@ -11,17 +11,15 @@ import androidx.core.content.ContextCompat;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.database.LocalItem;
 import org.schabi.newpipe.database.stream.StreamStatisticsEntry;
-import org.schabi.newpipe.database.stream.model.StreamStateEntity;
 import org.schabi.newpipe.extractor.NewPipe;
+import org.schabi.newpipe.ktx.ViewUtils;
 import org.schabi.newpipe.local.LocalItemBuilder;
 import org.schabi.newpipe.local.history.HistoryRecordManager;
-import org.schabi.newpipe.util.AnimationUtils;
 import org.schabi.newpipe.util.ImageDisplayConstants;
 import org.schabi.newpipe.util.Localization;
 import org.schabi.newpipe.views.AnimatedProgressBar;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -98,15 +96,11 @@ public class LocalStatisticStreamItemHolder extends LocalItemHolder {
                     R.color.duration_background_color));
             itemDurationView.setVisibility(View.VISIBLE);
 
-            final StreamStateEntity state = historyRecordManager
-                    .loadLocalStreamStateBatch(new ArrayList<LocalItem>() {{
-                add(localItem);
-            }}).blockingGet().get(0);
-            if (state != null) {
+            if (item.getProgressTime() > 0) {
                 itemProgressView.setVisibility(View.VISIBLE);
                 itemProgressView.setMax((int) item.getStreamEntity().getDuration());
                 itemProgressView.setProgress((int) TimeUnit.MILLISECONDS
-                        .toSeconds(state.getProgressTime()));
+                        .toSeconds(item.getProgressTime()));
             } else {
                 itemProgressView.setVisibility(View.GONE);
             }
@@ -146,22 +140,18 @@ public class LocalStatisticStreamItemHolder extends LocalItemHolder {
         }
         final StreamStatisticsEntry item = (StreamStatisticsEntry) localItem;
 
-        final StreamStateEntity state = historyRecordManager
-                .loadLocalStreamStateBatch(new ArrayList<LocalItem>() {{
-            add(localItem);
-        }}).blockingGet().get(0);
-        if (state != null && item.getStreamEntity().getDuration() > 0) {
+        if (item.getProgressTime() > 0 && item.getStreamEntity().getDuration() > 0) {
             itemProgressView.setMax((int) item.getStreamEntity().getDuration());
             if (itemProgressView.getVisibility() == View.VISIBLE) {
                 itemProgressView.setProgressAnimated((int) TimeUnit.MILLISECONDS
-                        .toSeconds(state.getProgressTime()));
+                        .toSeconds(item.getProgressTime()));
             } else {
                 itemProgressView.setProgress((int) TimeUnit.MILLISECONDS
-                        .toSeconds(state.getProgressTime()));
-                AnimationUtils.animateView(itemProgressView, true, 500);
+                        .toSeconds(item.getProgressTime()));
+                ViewUtils.animate(itemProgressView, true, 500);
             }
         } else if (itemProgressView.getVisibility() == View.VISIBLE) {
-            AnimationUtils.animateView(itemProgressView, false, 500);
+            ViewUtils.animate(itemProgressView, false, 500);
         }
     }
 }

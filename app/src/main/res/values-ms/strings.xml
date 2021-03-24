@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_bg_subtitle">Tekan carian untuk bermula</string>
+    <string name="main_bg_subtitle">Tekan \"Cari\" untuk bermula
+\n</string>
     <string name="view_count_text">%1$s tontonan</string>
     <string name="upload_date_text">Diterbitkan pada %1$s</string>
     <string name="no_player_found">Tiada pemain strim ditemui. Adakah anda mahu memasang VLC\?</string>
@@ -61,6 +62,8 @@
     <string name="light_theme_title">Cerah</string>
     <string name="dark_theme_title">Gelap</string>
     <string name="black_theme_title">Hitam</string>
+    <string name="popup_remember_size_pos_title">Mengingat saiz dan posisi popup</string>
+    <string name="popup_remember_size_pos_summary">Mengingat saiz dan posisi popup terakhir</string>
     <string name="use_inexact_seek_title">Gunakan tinjau laju tidak tepat</string>
     <string name="use_inexact_seek_summary">Membolehkan pemain untuk meninjau ke posisi lebih laju dengan kurang ketepatan</string>
     <string name="download_thumbnail_title">Muatkan thumbnail</string>
@@ -126,7 +129,6 @@
     <string name="filter">Penapis</string>
     <string name="refresh">Segarkan</string>
     <string name="clear">Bersihkan</string>
-    <string name="popup_resizing_indicator_title">Mengubah saiz</string>
     <string name="best_resolution">Resolusi terbaik</string>
     <string name="undo">Undo</string>
     <string name="file_deleted">Fail dipadam</string>
@@ -449,4 +451,10 @@
     <string name="missions_header_pending">Menunggu</string>
     <string name="download_choose_new_path">Ubah folder muat turun untuk melihat kesan</string>
     <string name="search_showing_result_for">Menunjuk carian untuk: %s</string>
+    <plurals name="days">
+        <item quantity="other">%d hari</item>
+    </plurals>
+    <string name="help">Bantuan</string>
+    <string name="settings_category_notification_title">Pemberitahuan</string>
+    <string name="open_with">Buka dengan</string>
 </resources>

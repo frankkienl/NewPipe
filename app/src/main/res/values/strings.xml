@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="main_bg_subtitle">Tap \"Search\" to get started
 \n</string>
@@ -11,6 +11,7 @@
     <string name="fdroid_vlc_url" translatable="false">https://f-droid.org/repository/browse/?fdfilter=vlc&amp;fdid=org.videolan.vlc</string>
     <string name="open_in_browser">Open in browser</string>
     <string name="open_in_popup_mode">Open in popup mode</string>
+    <string name="open_with">Open with</string>
     <string name="share">Share</string>
     <string name="download">Download</string>
     <string name="controls_download_desc">Download stream file</string>
@@ -78,9 +79,12 @@
     <string name="default_audio_format_title">Default audio format</string>
     <string name="default_video_format_title">Default video format</string>
     <string name="theme_title">Theme</string>
+    <string name="night_theme_title">Night Theme</string>
     <string name="light_theme_title">Light</string>
     <string name="dark_theme_title">Dark</string>
     <string name="black_theme_title">Black</string>
+    <string name="popup_remember_size_pos_title">Remember popup properties</string>
+    <string name="popup_remember_size_pos_summary">Remember last size and position of popup</string>
     <string name="use_inexact_seek_title">Use fast inexact seek</string>
     <string name="use_inexact_seek_summary">Inexact seek allows the player to seek to positions faster with reduced precision. Seeking for 5, 15 or 25 seconds doesn\'t work with this.</string>
     <string name="seek_duration_title">Fast-forward/-rewind seek duration</string>
@@ -88,9 +92,14 @@
     <string name="clear_queue_confirmation_summary">Switching from one player to another may replace your queue</string>
     <string name="clear_queue_confirmation_description">The active player queue will be replaced</string>
     <string name="download_thumbnail_title">Load thumbnails</string>
+    <string name="download_thumbnail_summary">Turn off to prevent loading thumbnails, saving data and memory usage. Changes clear both in-memory and on-disk image cache.</string>
     <string name="show_comments_title">Show comments</string>
     <string name="show_comments_summary">Turn off to hide comments</string>
-    <string name="download_thumbnail_summary">Turn off to prevent loading thumbnails, saving data and memory usage. Changes clear both in-memory and on-disk image cache.</string>
+    <string name="show_next_and_similar_title">Show \'Next\' and \'Similar\' videos</string>
+    <string name="show_description_title">Show description</string>
+    <string name="show_description_summary">Turn off to hide video description and additional information</string>
+    <string name="show_meta_info_title">Show meta info</string>
+    <string name="show_meta_info_summary">Turn off to hide meta info boxes with additional information about the stream creator, stream content or a search request.</string>
     <string name="thumbnail_cache_wipe_complete_notice">Image cache wiped</string>
     <string name="metadata_cache_wipe_title">Wipe cached metadata</string>
     <string name="metadata_cache_wipe_summary">Remove all cached webpage data</string>
@@ -119,7 +128,6 @@
     <string name="resume_on_audio_focus_gain_summary">Continue playing after interruptions (e.g. phonecalls)</string>
     <string name="download_dialog_title">Download</string>
     <string name="autoplay_title">Autoplay</string>
-    <string name="show_next_and_similar_title">Show \'Next\' and \'Similar\' videos</string>
     <string name="show_hold_to_append_title">Show \"Hold to append\" tip</string>
     <string name="show_hold_to_append_summary">Show tip when pressing the background or the popup button in video \"Details:\"</string>
     <string name="unsupported_url">Unsupported URL</string>
@@ -153,10 +161,11 @@
     <string name="c3s_url" translatable="false">https://www.c3s.cc/</string>
     <string name="content">Content</string>
     <string name="show_age_restricted_content_title">Show age restricted content</string>
-    <string name="show_age_restricted_content_summary">Show content possibly unsuitable for children because it has an age limit (like 18+).</string>
+    <string name="show_age_restricted_content_summary">Show content possibly unsuitable for children because it has an age limit (like 18+)</string>
     <string name="youtube_restricted_mode_enabled_title">Turn on YouTube\'s \"Restricted Mode\"</string>
-    <string name="youtube_restricted_mode_enabled_summary">YouTube provides a \"Restricted Mode\" which hides potentially mature content.</string>
+    <string name="youtube_restricted_mode_enabled_summary">YouTube provides a \"Restricted Mode\" which hides potentially mature content</string>
     <string name="restricted_video">This video is age restricted.\n\nTurn on \"%1$s\" in the settings if you want to see it.</string>
+    <string name="restricted_video_no_stream">This video is age-restricted.\nDue to new YouTube policies with age-restricted videos, NewPipe cannot access any of its video streams and thus is unable to play it.</string>
     <string name="duration_live">Live</string>
     <string name="downloads">Downloads</string>
     <string name="downloads_title">Downloads</string>
@@ -179,7 +188,6 @@
     <string name="filter">Filter</string>
     <string name="refresh">Refresh</string>
     <string name="clear">Clear</string>
-    <string name="popup_resizing_indicator_title">Resizing</string>
     <string name="best_resolution">Best resolution</string>
     <string name="undo">Undo</string>
     <string name="file_deleted">File deleted</string>
@@ -193,6 +201,9 @@
     <string name="app_update_notification_channel_id" translatable="false">newpipeAppUpdate</string>
     <string name="app_update_notification_channel_name">App Update Notification</string>
     <string name="app_update_notification_channel_description">Notifications for new NewPipe version</string>
+    <string name="hash_channel_id" translatable="false">newpipeHash</string>
+    <string name="hash_channel_name">Video Hash Notification</string>
+    <string name="hash_channel_description">Notifications for video hashing progress</string>
     <string name="unknown_content">[Unknown]</string>
     <string name="toggle_orientation">Toggle Orientation</string>
     <string name="switch_to_background">Switch to Background</string>
@@ -202,8 +213,8 @@
     <string name="export_data_title">Export database</string>
     <string name="clear_cookie_title">Clear reCAPTCHA cookies</string>
     <string name="recaptcha_cookies_cleared">reCAPTCHA cookies have been cleared</string>
-    <string name="import_data_summary">Overrides your current history and subscriptions</string>
-    <string name="export_data_summary">Export history, subscriptions and playlists</string>
+    <string name="import_data_summary">Overrides your current history, subscriptions, playlists and (optionally) settings</string>
+    <string name="export_data_summary">Export history, subscriptions, playlists and settings</string>
     <string name="clear_cookie_summary">Clear cookies that NewPipe stores when you solve a reCAPTCHA</string>
     <string name="clear_views_history_title">Clear watch history</string>
     <string name="clear_views_history_summary">Deletes the history of played streams and the playback positions</string>
@@ -271,6 +282,9 @@
     <string name="detail_uploader_thumbnail_view_description">Uploader\'s avatar thumbnail</string>
     <string name="detail_likes_img_view_description">Likes</string>
     <string name="detail_dislikes_img_view_description">Dislikes</string>
+    <string name="comments_tab_description">Comments</string>
+    <string name="related_streams_tab_description">Related streams</string>
+    <string name="description_tab_description">Description</string>
     <string name="use_tor_title">Use Tor</string>
     <string name="use_tor_summary">(Experimental) Force download traffic through Tor for increased privacy (streaming videos not yet supported).</string>
     <string name="report_error">Report error</string>
@@ -345,6 +359,7 @@
     <string name="msg_url_malform">Malformed URL or Internet not available</string>
     <string name="msg_running">NewPipe Downloading</string>
     <string name="msg_running_detail">Tap for details</string>
+    <string name="msg_calculating_hash">Calculating hash</string>
     <string name="msg_wait">Please wait…</string>
     <string name="msg_copied">Copied to clipboard</string>
     <string name="no_available_dir">Please define a download folder later in settings</string>
@@ -358,6 +373,7 @@
     <string name="title_activity_recaptcha">reCAPTCHA challenge</string>
     <string name="subtitle_activity_recaptcha">Press \"Done\" when solved</string>
     <string name="recaptcha_request_toast">reCAPTCHA challenge requested</string>
+    <string name="recaptcha_solve">Solve</string>
     <string name="recaptcha_done_button">Done</string>
     <!-- Downloads -->
     <string name="settings_category_downloads_title">Download</string>
@@ -385,14 +401,14 @@
     <string name="view_on_github">View on GitHub</string>
     <string name="donation_title">Donate</string>
     <string name="donation_encouragement">NewPipe is developed by volunteers spending their free time bringing you the best user experience. Give back to help developers make NewPipe even better while they enjoy a cup of coffee.</string>
-    <string name="donation_url" translatable="false">https://newpipe.schabi.org/donate</string>
+    <string name="donation_url" translatable="false">https://newpipe.net/donate</string>
     <string name="give_back">Give back</string>
     <string name="website_title">Website</string>
     <string name="website_encouragement">Visit the NewPipe Website for more info and news.</string>
-    <string name="website_url" translatable="false">https://newpipe.schabi.org/</string>
+    <string name="website_url" translatable="false">https://newpipe.net/</string>
     <string name="privacy_policy_title">NewPipe\'s Privacy Policy</string>
     <string name="privacy_policy_encouragement">The NewPipe project takes your privacy very seriously. Therefore, the app does not collect any data without your consent.\nNewPipe\'s privacy policy explains in detail what data is sent and stored when you send a crash report.</string>
-    <string name="privacy_policy_url" translatable="false">https://newpipe.schabi.org/legal/privacy/</string>
+    <string name="privacy_policy_url" translatable="false">https://newpipe.net/legal/privacy/</string>
     <string name="read_privacy_policy">Read privacy policy</string>
     <string name="app_license_title">NewPipe\'s License</string>
     <string name="app_license">NewPipe is copyleft libre software: You can use, study share and improve it at will. Specifically you can redistribute and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</string>
@@ -505,6 +521,7 @@
     <string name="enable_disposed_exceptions_summary">Force reporting of undeliverable Rx exceptions outside of fragment or activity lifecycle after disposal</string>
     <string name="show_original_time_ago_title">Show original time ago on items</string>
     <string name="show_original_time_ago_summary">Original texts from services will be visible in stream items</string>
+    <string name="crash_the_app">Crash the app</string>
     <!-- Subscriptions import/export -->
     <string name="import_export_title">Import/export</string>
     <string name="import_title">Import</string>
@@ -681,4 +698,20 @@
     <string name="channel_created_by">Created by %s</string>
     <string name="video_detail_by">By %s</string>
     <string name="playlist_page_summary">Playlist page</string>
+    <string name="show_thumbnail_title">Show thumbnail</string>
+    <string name="show_thumbnail_summary">Use thumbnail for both lock screen background and notifications</string>
+    <string name="recent">Recent</string>
+    <string name="chapters">Chapters</string>
+    <string name="no_app_to_open_intent">No app on your device can open this</string>
+    <string name="georestricted_content">This content is not available in your country.</string>
+    <string name="soundcloud_go_plus_content">This is a SoundCloud Go+ track, at least in your country, so it cannot be streamed or downloaded by NewPipe.</string>
+    <string name="private_content">This content is private, so it cannot be streamed or downloaded by NewPipe.</string>
+    <string name="youtube_music_premium_content">This video is available only to YouTube Music Premium members, so it cannot be streamed or downloaded by NewPipe.</string>
+    <string name="paid_content">This content is only available to users who have paid, so it cannot be streamed or downloaded by NewPipe.</string>
+    <string name="featured">Featured</string>
+    <string name="radio">Radio</string>
+    <string name="auto_device_theme_title">Automatic (device theme)</string>
+    <string name="night_theme_summary">Select your favorite night theme — %s</string>
+    <string name="select_night_theme_toast">You can select your favorite night theme below</string>
+    <string name="download_has_started">Download has started</string>
 </resources>

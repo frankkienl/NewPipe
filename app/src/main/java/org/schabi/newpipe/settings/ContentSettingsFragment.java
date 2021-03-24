@@ -3,7 +3,6 @@ package org.schabi.newpipe.settings;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
@@ -21,28 +21,18 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.schabi.newpipe.DownloaderImpl;
 import org.schabi.newpipe.NewPipeDatabase;
 import org.schabi.newpipe.R;
-import org.schabi.newpipe.ReCaptchaActivity;
+import org.schabi.newpipe.error.ErrorActivity;
+import org.schabi.newpipe.error.ReCaptchaActivity;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.localization.ContentCountry;
 import org.schabi.newpipe.extractor.localization.Localization;
-import org.schabi.newpipe.report.ErrorActivity;
-import org.schabi.newpipe.report.UserAction;
 import org.schabi.newpipe.util.FilePickerActivityHelper;
 import org.schabi.newpipe.util.ZipHelper;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 import static org.schabi.newpipe.util.Localization.assureCorrectAppLanguage;
 
@@ -50,12 +40,7 @@ public class ContentSettingsFragment extends BasePreferenceFragment {
     private static final int REQUEST_IMPORT_PATH = 8945;
     private static final int REQUEST_EXPORT_PATH = 30945;
 
-    private File databasesDir;
-    private File newpipeDb;
-    private File newpipeDbJournal;
-    private File newpipeDbShm;
-    private File newpipeDbWal;
-    private File newpipeSettings;
+    private ContentSettingsManager manager;
 
     private String thumbnailLoadToggleKey;
     private String youtubeRestrictedModeEnabledKey;
@@ -120,21 +105,14 @@ public class ContentSettingsFragment extends BasePreferenceFragment {
 
     @Override
     public void onCreatePreferences(final Bundle savedInstanceState, final String rootKey) {
-
-        final String homeDir = getActivity().getApplicationInfo().dataDir;
-        databasesDir = new File(homeDir + "/databases");
-        newpipeDb = new File(homeDir + "/databases/newpipe.db");
-        newpipeDbJournal = new File(homeDir + "/databases/newpipe.db-journal");
-        newpipeDbShm = new File(homeDir + "/databases/newpipe.db-shm");
-        newpipeDbWal = new File(homeDir + "/databases/newpipe.db-wal");
-
-        newpipeSettings = new File(homeDir + "/databases/newpipe.settings");
-        newpipeSettings.delete();
+        final File homeDir = ContextCompat.getDataDir(requireContext());
+        manager = new ContentSettingsManager(new NewPipeFileLocator(homeDir));
+        manager.deleteSettingsFile();
 
         addPreferencesFromResource(R.xml.content_settings);
 
         final Preference importDataPreference = findPreference(getString(R.string.import_data));
-        importDataPreference.setOnPreferenceClickListener((Preference p) -> {
+        importDataPreference.setOnPreferenceClickListener(p -> {
             final Intent i = new Intent(getActivity(), FilePickerActivityHelper.class)
                     .putExtra(FilePickerActivityHelper.EXTRA_ALLOW_MULTIPLE, false)
                     .putExtra(FilePickerActivityHelper.EXTRA_ALLOW_CREATE_DIR, false)
@@ -145,7 +123,7 @@ public class ContentSettingsFragment extends BasePreferenceFragment {
         });
 
         final Preference exportDataPreference = findPreference(getString(R.string.export_data));
-        exportDataPreference.setOnPreferenceClickListener((Preference p) -> {
+        exportDataPreference.setOnPreferenceClickListener(p -> {
             final Intent i = new Intent(getActivity(), FilePickerActivityHelper.class)
                     .putExtra(FilePickerActivityHelper.EXTRA_ALLOW_MULTIPLE, false)
                     .putExtra(FilePickerActivityHelper.EXTRA_ALLOW_CREATE_DIR, true)
@@ -199,9 +177,9 @@ public class ContentSettingsFragment extends BasePreferenceFragment {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage(R.string.override_current_data)
                         .setPositiveButton(getString(R.string.finish),
-                                (DialogInterface d, int id) -> importDatabase(path))
+                                (d, id) -> importDatabase(path))
                         .setNegativeButton(android.R.string.cancel,
-                                (DialogInterface d, int id) -> d.cancel());
+                                (d, id) -> d.cancel());
                 builder.create().show();
             }
         }
@@ -212,81 +190,36 @@ public class ContentSettingsFragment extends BasePreferenceFragment {
             //checkpoint before export
             NewPipeDatabase.checkpoint();
 
-            final ZipOutputStream outZip = new ZipOutputStream(
-                    new BufferedOutputStream(
-                            new FileOutputStream(path)));
-            ZipHelper.addFileToZip(outZip, newpipeDb.getPath(), "newpipe.db");
+            final SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(requireContext());
+            manager.exportDatabase(preferences, path);
 
-            saveSharedPreferencesToFile(newpipeSettings);
-            ZipHelper.addFileToZip(outZip, newpipeSettings.getPath(), "newpipe.settings");
-
-            outZip.close();
-
-            Toast.makeText(getContext(), R.string.export_complete_toast, Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(getContext(), R.string.export_complete_toast, Toast.LENGTH_SHORT).show();
         } catch (final Exception e) {
-            onError(e);
-        }
-    }
-
-    private void saveSharedPreferencesToFile(final File dst) {
-        ObjectOutputStream output = null;
-        try {
-            output = new ObjectOutputStream(new FileOutputStream(dst));
-            final SharedPreferences pref
-                    = PreferenceManager.getDefaultSharedPreferences(requireContext());
-            output.writeObject(pref.getAll());
-
-        } catch (final IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (output != null) {
-                    output.flush();
-                    output.close();
-                }
-            } catch (final IOException ex) {
-                ex.printStackTrace();
-            }
+            ErrorActivity.reportUiErrorInSnackbar(this, "Exporting database", e);
         }
     }
 
     private void importDatabase(final String filePath) {
         // check if file is supported
-        ZipFile zipFile = null;
-        try {
-            zipFile = new ZipFile(filePath);
-        } catch (final IOException ioe) {
+        if (!ZipHelper.isValidZipFile(filePath)) {
             Toast.makeText(getContext(), R.string.no_valid_zip_file, Toast.LENGTH_SHORT)
-                    .show();
+                .show();
             return;
-        } finally {
-            try {
-                zipFile.close();
-            } catch (final Exception ignored) {
-            }
         }
 
         try {
-            if (!databasesDir.exists() && !databasesDir.mkdir()) {
+            if (!manager.ensureDbDirectoryExists()) {
                 throw new Exception("Could not create databases dir");
             }
 
-            final boolean isDbFileExtracted = ZipHelper.extractFileFromZip(filePath,
-                    newpipeDb.getPath(), "newpipe.db");
-
-            if (isDbFileExtracted) {
-                newpipeDbJournal.delete();
-                newpipeDbWal.delete();
-                newpipeDbShm.delete();
-            } else {
+            if (!manager.extractDb(filePath)) {
                 Toast.makeText(getContext(), R.string.could_not_import_all_files, Toast.LENGTH_LONG)
-                        .show();
+                    .show();
             }
 
             //If settings file exist, ask if it should be imported.
-            if (ZipHelper.extractFileFromZip(filePath, newpipeSettings.getPath(),
-                    "newpipe.settings")) {
+            if (manager.extractSettings(filePath)) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                 alert.setTitle(R.string.import_settings);
 
@@ -297,7 +230,8 @@ public class ContentSettingsFragment extends BasePreferenceFragment {
                 });
                 alert.setPositiveButton(getString(R.string.finish), (dialog, which) -> {
                     dialog.dismiss();
-                    loadSharedPreferences(newpipeSettings);
+                    manager.loadSharedPreferences(PreferenceManager
+                        .getDefaultSharedPreferences(requireContext()));
                     // restart app to properly load db
                     System.exit(0);
                 });
@@ -307,58 +241,7 @@ public class ContentSettingsFragment extends BasePreferenceFragment {
                 System.exit(0);
             }
         } catch (final Exception e) {
-            onError(e);
+            ErrorActivity.reportUiErrorInSnackbar(this, "Importing database", e);
         }
-    }
-
-    private void loadSharedPreferences(final File src) {
-        ObjectInputStream input = null;
-        try {
-            input = new ObjectInputStream(new FileInputStream(src));
-            final SharedPreferences.Editor prefEdit = PreferenceManager
-                    .getDefaultSharedPreferences(requireContext()).edit();
-            prefEdit.clear();
-            final Map<String, ?> entries = (Map<String, ?>) input.readObject();
-            for (final Map.Entry<String, ?> entry : entries.entrySet()) {
-                final Object v = entry.getValue();
-                final String key = entry.getKey();
-
-                if (v instanceof Boolean) {
-                    prefEdit.putBoolean(key, (Boolean) v);
-                } else if (v instanceof Float) {
-                    prefEdit.putFloat(key, (Float) v);
-                } else if (v instanceof Integer) {
-                    prefEdit.putInt(key, (Integer) v);
-                } else if (v instanceof Long) {
-                    prefEdit.putLong(key, (Long) v);
-                } else if (v instanceof String) {
-                    prefEdit.putString(key, (String) v);
-                }
-            }
-            prefEdit.commit();
-        } catch (final IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    /*//////////////////////////////////////////////////////////////////////////
-    // Error
-    //////////////////////////////////////////////////////////////////////////*/
-
-    protected void onError(final Throwable e) {
-        final Activity activity = getActivity();
-        ErrorActivity.reportError(activity, e,
-                activity.getClass(),
-                null,
-                ErrorActivity.ErrorInfo.make(UserAction.UI_ERROR,
-                        "none", "", R.string.app_ui_crash));
     }
 }

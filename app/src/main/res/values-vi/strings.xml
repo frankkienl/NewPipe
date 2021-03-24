@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_bg_subtitle">Nhấn \"Tìm kiếm\" để bắt đầu</string>
+    <string name="main_bg_subtitle">Nhấn \"Tìm kiếm\" để bắt đầu
+\n</string>
     <string name="view_count_text">%1$s lượt xem</string>
     <string name="upload_date_text">Đăng vào %1$s</string>
     <string name="no_player_found">Không tìm thấy trình phát. Cài đặt VLC\?</string>
@@ -44,6 +45,8 @@
     <string name="light_theme_title">Sáng</string>
     <string name="dark_theme_title">Tối</string>
     <string name="black_theme_title">Đen</string>
+    <string name="popup_remember_size_pos_title">Nhớ kích thước và vị trí của popup</string>
+    <string name="popup_remember_size_pos_summary">Nhớ kích thước và vị trí lần trước của popup</string>
     <string name="player_gesture_controls_title">Điều khiển cử chỉ trình phát</string>
     <string name="player_gesture_controls_summary">Sử dụng cử chỉ để điều chỉnh độ sáng và âm lượng</string>
     <string name="show_search_suggestions_title">Đề xuất tìm kiếm</string>
@@ -56,7 +59,7 @@
     <string name="background_player_playing_toast">Phát ở chế độ nền</string>
     <string name="popup_playing_toast">Phát ở chế độ popup</string>
     <string name="content">Nội dung</string>
-    <string name="show_age_restricted_content_title">Cho phép nội dung có giới hạn độ tuổi</string>
+    <string name="show_age_restricted_content_title">Cho phép và hiển thị nội dung có giới hạn độ tuổi</string>
     <string name="duration_live">Trực tiếp</string>
     <string name="downloads">Tải xuống</string>
     <string name="downloads_title">Tải xuống</string>
@@ -69,7 +72,6 @@
     <string name="filter">Bộ lọc</string>
     <string name="refresh">Tải lại</string>
     <string name="clear">Xóa</string>
-    <string name="popup_resizing_indicator_title">Thay đổi kích thước</string>
     <string name="best_resolution">Độ phân giải tốt nhất</string>
     <string name="general_error">Lỗi</string>
     <string name="network_error">Lỗi kết nối mạng</string>
@@ -114,7 +116,7 @@
     <string name="pause">Dừng</string>
     <string name="view">Chơi</string>
     <string name="delete">Xóa</string>
-    <string name="checksum">Checksum</string>
+    <string name="checksum">Mã tổng kiểm (checksum)</string>
     <string name="add">Nhiệm vụ mới</string>
     <string name="finish">OK</string>
     <string name="msg_name">Tên file</string>
@@ -211,8 +213,8 @@
     <string name="switch_to_main">Chuyển sang Main</string>
     <string name="import_data_title">Nhập cơ sở dữ liệu</string>
     <string name="export_data_title">Xuất cơ sở dữ liệu</string>
-    <string name="import_data_summary">Ghi đè lịch sử và danh sách đăng ký hiện tại của bạn</string>
-    <string name="export_data_summary">Xuất lịch sử, đăng ký và playlist</string>
+    <string name="import_data_summary">Ghi đè lịch sử, danh sách đăng ký, playlist (và cài đặt, nếu có chọn) hiện tại của bạn</string>
+    <string name="export_data_summary">Xuất lịch sử, danh sách đăng ký, playlist và cài đặt</string>
     <string name="clear_views_history_title">Xóa lịch sử xem</string>
     <string name="clear_views_history_summary">Xóa lịch sử các luồng đã phát và vị trí phát</string>
     <string name="delete_view_history_alert">Xóa toàn bộ lịch sử xem\?</string>
@@ -353,11 +355,14 @@
     <string name="previous_export">Xuất trước</string>
     <string name="subscriptions_import_unsuccessful">Không thể nhập đăng ký</string>
     <string name="subscriptions_export_unsuccessful">Không thể xuất đăng ký</string>
-    <string name="import_youtube_instructions">Nhập danh sách đăng ký YouTube bằng cách tải xuống tệp xuất:
+    <string name="import_youtube_instructions">Nhập danh sách đăng ký YouTube từ một bản Google Takeout:
 \n
-\n1. Truy cập URL này: %1$s
+\n1. Vào URL này: %1$s
 \n2. Đăng nhập khi được yêu cầu
-\n3. Một tệp sẽ được tải về (đó là tệp xuất)</string>
+\n3. Nhấn chọn \"Bao gồm tất cả dữ liệu trên YouTube\", sau đó nhấn \"Bỏ chọn tất cả\", sau đó chỉ chọn mục \"đăng kí\" rồi nhấn OK
+\n4. Nhấn nút \"Bước tiếp theo\" rồi nhấn \"Tạo tệp xuất\"
+\n5. Nhấn nút \"Tải xuống\" khi nó hiện
+\n6. Từ file zip mới tải về, trích xuất file .json ra (thường nằm ở đường dẫn \"YouTube và YouTube Music/đăng kí/subscriptions.json\") rồi nhập vào đây.</string>
     <string name="import_soundcloud_instructions">Nhập hồ sơ SoundCloud bằng cách nhập URL hoặc ID của bạn:
 \n
 \n1. Bật \"chế độ màn hình\" trong trình duyệt web (trang web không khả dụng cho thiết bị di động)
@@ -539,8 +544,8 @@
     <string name="videos_string">Video</string>
     <string name="restricted_video">Video này bị giới hạn độ tuổi.
 \n
-\nBật \"Nội dung giới hạn độ tuổi\" trong cài đặt nếu bạn muốn xem video này.</string>
-    <string name="youtube_restricted_mode_enabled_title">Chế độ giới hạn YouTube</string>
+\nBật \"%1$s\" trong cài đặt nếu bạn muốn xem video này.</string>
+    <string name="youtube_restricted_mode_enabled_title">hế độ giới hạn YouTube</string>
     <string name="peertube_instance_add_https_only">Chỉ URL HTTPS được hỗ trợ</string>
     <string name="peertube_instance_url_summary">Chọn thực thể PeerTube ưa thích</string>
     <string name="peertube_instance_url_title">Thực thể PeerTube</string>
@@ -572,7 +577,7 @@
     <string name="feed_update_threshold_option_always_update">Luôn cập nhật</string>
     <string name="feed_update_threshold_summary">Khoảng thời gian kể từ lần cuối cập nhật thông tin kênh trước khi nó được coi là hết hạn — %s</string>
     <string name="feed_update_threshold_title">Ngưỡng thời gian cập nhật feed</string>
-    <string name="settings_category_feed_title">Feed</string>
+    <string name="settings_category_feed_title">Nguồn cấp (feed)</string>
     <string name="feed_create_new_group_button_title">Tạo</string>
     <string name="feed_group_dialog_delete_message">Bạn muốn xóa nhóm kênh này\?</string>
     <string name="feed_group_dialog_empty_name">Tên nhóm kênh trống</string>
@@ -621,4 +626,30 @@
     <string name="notification_scale_to_square_image_summary">Thu nhỏ ảnh thumbnail trong thông báo từ tỉ lệ 16:9 xuống 1:1 (có thể gây méo ảnh)</string>
     <string name="notification_scale_to_square_image_title">Thu nhỏ ảnh thumbnail theo tỉ lệ 1:1</string>
     <string name="search_showing_result_for">Hiện kết quả cho: %s</string>
+    <string name="enqueue_stream">Hàng</string>
+    <string name="show_age_restricted_content_summary">Hiển thị nội dung không an toàn cho trẻ em vì có giới hạn độ tuổi (+18)</string>
+    <string name="show_thumbnail_summary">Hiện ảnh thu nhỏ (thumbnail) trên nền màn hình khóa và trong thông báo</string>
+    <string name="show_thumbnail_title">Xem hình thu nhỏ</string>
+    <string name="show_memory_leaks">Kiểm tra bộ</string>
+    <string name="enqueued">Hàng</string>
+    <string name="clear_cookie_summary">Xoá Cookie mà NewPipe lưu trữ sau khi bạn vượt</string>
+    <string name="recaptcha_cookies_cleared">Cookie đã được</string>
+    <string name="clear_cookie_title">Xoá bỏ Cookie của</string>
+    <string name="youtube_restricted_mode_enabled_summary">YouTube cung cấp \"Chế độ hạn chế\" để ẩn nội dung người lớn</string>
+    <string name="notification_colorize_summary">Yêu cầu Android tùy chỉnh màu của thông báo theo màu chính của video, có thể không khả dụng trong vài thiết bị</string>
+    <string name="notification_colorize_title">àu thông báo</string>
+    <string name="no_app_to_open_intent">Không có ứng dụng nào trên thiết bị của bạn có thể mở cái này</string>
+    <string name="chapters">Chương</string>
+    <string name="recent">Gần đây</string>
+    <string name="msg_calculating_hash">Đang tính toán hash</string>
+    <string name="description_tab_description">Mô tả</string>
+    <string name="related_streams_tab_description">Stream liên quan</string>
+    <string name="comments_tab_description">Bình luận</string>
+    <string name="hash_channel_description">Thông báo cho quá trình hash video</string>
+    <string name="hash_channel_name">Thông báo hash video</string>
+    <string name="show_meta_info_summary">Tắt tùy chọn này để ẩn các hộp thông tin meta chứa thông tin về tác giả/nội dung của stream, hoặc yêu cầu tìm kiếm.</string>
+    <string name="show_meta_info_title">Hiện thông tin meta</string>
+    <string name="show_description_summary">Tắt tùy chọn này để ẩn mô tả video và các thông tin khác</string>
+    <string name="show_description_title">Hiện mô tả</string>
+    <string name="open_with">Mở bằng</string>
 </resources>

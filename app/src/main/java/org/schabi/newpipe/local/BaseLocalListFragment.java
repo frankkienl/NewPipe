@@ -4,23 +4,27 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
 
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.databinding.PignateFooterBinding;
 import org.schabi.newpipe.fragments.BaseStateFragment;
 import org.schabi.newpipe.fragments.list.ListViewContract;
 
-import static org.schabi.newpipe.util.AnimationUtils.animateView;
+import static org.schabi.newpipe.ktx.ViewUtils.animate;
+import static org.schabi.newpipe.ktx.ViewUtils.animateHideRecyclerViewAllowingScrolling;
 
 /**
  * This fragment is design to be used with persistent data such as
@@ -42,8 +46,8 @@ public abstract class BaseLocalListFragment<I, N> extends BaseStateFragment<I>
     //////////////////////////////////////////////////////////////////////////*/
 
     private static final int LIST_MODE_UPDATE_FLAG = 0x32;
-    private View headerRootView;
-    private View footerRootView;
+    private ViewBinding headerRootBinding;
+    private ViewBinding footerRootBinding;
     protected LocalItemListAdapter itemListAdapter;
     protected RecyclerView itemsList;
     private int updateFlags = 0;
@@ -86,12 +90,13 @@ public abstract class BaseLocalListFragment<I, N> extends BaseStateFragment<I>
     // Lifecycle - View
     //////////////////////////////////////////////////////////////////////////*/
 
-    protected View getListHeader() {
+    @Nullable
+    protected ViewBinding getListHeader() {
         return null;
     }
 
-    protected View getListFooter() {
-        return activity.getLayoutInflater().inflate(R.layout.pignate_footer, itemsList, false);
+    protected ViewBinding getListFooter() {
+        return PignateFooterBinding.inflate(activity.getLayoutInflater(), itemsList, false);
     }
 
     protected RecyclerView.LayoutManager getGridLayoutManager() {
@@ -120,10 +125,12 @@ public abstract class BaseLocalListFragment<I, N> extends BaseStateFragment<I>
         itemsList.setLayoutManager(useGrid ? getGridLayoutManager() : getListLayoutManager());
 
         itemListAdapter.setUseGridVariant(useGrid);
-        headerRootView = getListHeader();
-        itemListAdapter.setHeader(headerRootView);
-        footerRootView = getListFooter();
-        itemListAdapter.setFooter(footerRootView);
+        headerRootBinding = getListHeader();
+        if (headerRootBinding != null) {
+            itemListAdapter.setHeader(headerRootBinding.getRoot());
+        }
+        footerRootBinding = getListFooter();
+        itemListAdapter.setFooter(footerRootBinding.getRoot());
 
         itemsList.setAdapter(itemListAdapter);
     }
@@ -178,10 +185,10 @@ public abstract class BaseLocalListFragment<I, N> extends BaseStateFragment<I>
     public void showLoading() {
         super.showLoading();
         if (itemsList != null) {
-            animateView(itemsList, false, 200);
+            animateHideRecyclerViewAllowingScrolling(itemsList);
         }
-        if (headerRootView != null) {
-            animateView(headerRootView, false, 200);
+        if (headerRootBinding != null) {
+            animate(headerRootBinding.getRoot(), false, 200);
         }
     }
 
@@ -189,23 +196,10 @@ public abstract class BaseLocalListFragment<I, N> extends BaseStateFragment<I>
     public void hideLoading() {
         super.hideLoading();
         if (itemsList != null) {
-            animateView(itemsList, true, 200);
+            animate(itemsList, true, 200);
         }
-        if (headerRootView != null) {
-            animateView(headerRootView, true, 200);
-        }
-    }
-
-    @Override
-    public void showError(final String message, final boolean showRetryButton) {
-        super.showError(message, showRetryButton);
-        showListFooter(false);
-
-        if (itemsList != null) {
-            animateView(itemsList, false, 200);
-        }
-        if (headerRootView != null) {
-            animateView(headerRootView, false, 200);
+        if (headerRootBinding != null) {
+            animate(headerRootBinding.getRoot(), true, 200);
         }
     }
 
@@ -243,9 +237,18 @@ public abstract class BaseLocalListFragment<I, N> extends BaseStateFragment<I>
     }
 
     @Override
-    protected boolean onError(final Throwable exception) {
+    public void handleError() {
+        super.handleError();
         resetFragment();
-        return super.onError(exception);
+
+        showListFooter(false);
+
+        if (itemsList != null) {
+            animateHideRecyclerViewAllowingScrolling(itemsList);
+        }
+        if (headerRootBinding != null) {
+            animate(headerRootBinding.getRoot(), false, 200);
+        }
     }
 
     @Override

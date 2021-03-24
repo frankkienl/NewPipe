@@ -12,6 +12,9 @@ import com.grack.nanojson.JsonSink;
 
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.database.LocalItem.LocalItemType;
+import org.schabi.newpipe.error.ErrorActivity;
+import org.schabi.newpipe.error.ErrorInfo;
+import org.schabi.newpipe.error.UserAction;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.StreamingService;
 import org.schabi.newpipe.extractor.exceptions.ExtractionException;
@@ -25,8 +28,6 @@ import org.schabi.newpipe.local.feed.FeedFragment;
 import org.schabi.newpipe.local.history.StatisticsPlaylistFragment;
 import org.schabi.newpipe.local.playlist.LocalPlaylistFragment;
 import org.schabi.newpipe.local.subscription.SubscriptionFragment;
-import org.schabi.newpipe.report.ErrorActivity;
-import org.schabi.newpipe.report.UserAction;
 import org.schabi.newpipe.util.KioskTranslator;
 import org.schabi.newpipe.util.ServiceHelper;
 import org.schabi.newpipe.util.ThemeHelper;
@@ -116,7 +117,7 @@ public abstract class Tab {
             return true;
         }
 
-        return obj instanceof Tab && obj.getClass().equals(this.getClass())
+        return obj instanceof Tab && obj.getClass() == this.getClass()
                 && ((Tab) obj).getTabId() == this.getTabId();
     }
 
@@ -156,7 +157,7 @@ public abstract class Tab {
         CHANNEL(new ChannelTab()),
         PLAYLIST(new PlaylistTab());
 
-        private Tab tab;
+        private final Tab tab;
 
         Type(final Tab tab) {
             this.tab = tab;
@@ -482,9 +483,8 @@ public abstract class Tab {
                 final StreamingService service = NewPipe.getService(kioskServiceId);
                 kioskId = service.getKioskList().getDefaultKioskId();
             } catch (final ExtractionException e) {
-                ErrorActivity.reportError(context, e, null, null,
-                        ErrorActivity.ErrorInfo.make(UserAction.REQUESTED_KIOSK, "none",
-                                "Loading default kiosk from selected service", 0));
+                ErrorActivity.reportErrorInSnackbar(context, new ErrorInfo(e,
+                        UserAction.REQUESTED_KIOSK, "Loading default kiosk for selected service"));
             }
             return kioskId;
         }

@@ -59,6 +59,8 @@
     <string name="light_theme_title">Licht</string>
     <string name="dark_theme_title">Donker</string>
     <string name="black_theme_title">Zwart</string>
+    <string name="popup_remember_size_pos_title">Onthoud grootte en positie van pop-up</string>
+    <string name="popup_remember_size_pos_summary">Onthoud laatste grootte en positie van pop-up</string>
     <string name="use_inexact_seek_title">Snel, minder exact spoelen gebruiken</string>
     <string name="use_inexact_seek_summary">Minder exact spoelen laat de speler sneller posities zoeken met verminderde precisie. 5, 15 en 25 seconden werken niet.</string>
     <string name="download_thumbnail_title">Miniatuurvoorbeelden laden</string>
@@ -114,7 +116,6 @@
     <string name="filter">Filter</string>
     <string name="refresh">Verversen</string>
     <string name="clear">Wissen</string>
-    <string name="popup_resizing_indicator_title">Bezig met schalen</string>
     <string name="best_resolution">Beste resolutie</string>
     <string name="undo">Ongedaan maken</string>
     <string name="play_all">Alles afspelen</string>
@@ -130,8 +131,8 @@
     <string name="switch_to_main">Verplaatsen naar normaal</string>
     <string name="import_data_title">Databank importeren</string>
     <string name="export_data_title">Databank exporteren</string>
-    <string name="import_data_summary">Dit overschrijft uw huidige geschiedenis en abonnementen</string>
-    <string name="export_data_summary">Exporteert geschiedenis, abonnementen en speellijsten</string>
+    <string name="import_data_summary">Dit overschrijft uw huidige geschiedenis, abonnementen, speellijsten en optioneel uw instellingen</string>
+    <string name="export_data_summary">Exporteert geschiedenis, abonnementen, speellijsten en instellingen</string>
     <string name="general_error">Fout</string>
     <string name="network_error">Netwerkfout</string>
     <string name="could_not_load_thumbnails">Kon niet alle miniaturen laden</string>
@@ -339,11 +340,14 @@
     <string name="previous_export">Vorige exportering</string>
     <string name="subscriptions_import_unsuccessful">Kon abonnementen niet importeren</string>
     <string name="subscriptions_export_unsuccessful">Kon abonnementen niet exporteren</string>
-    <string name="import_youtube_instructions">Importeer uw YouTube-abonnementen door het exportbestand te downloaden:
+    <string name="import_youtube_instructions">Importeer je YouTube-abonnementen vanaf Google Takeout:
 \n
 \n1. Ga naar dit adres: %1$s
-\n2. Log in op uw account
-\n3. De download met het exportbestand zou nu moeten starten</string>
+\n2. Log in op je account
+\n3. Klik op \"Alle YouTube-gegevens inbegrepen\", dan op \"Selectie van alle items ongedaan maken\", dan selecteer alleen \"abonnementen\" en klik op \"OK\"
+\n4. Klik op \"Volgende stap\", dan op \"Export maken\"
+\n5. Klik op de knop \"Downloaden\" nadat deze verschijnt
+\n6. Uit de Takeout zipfile, pak de .json uit (gebruikelijk in de folder \"YouTube en YouTube Music/abonnementen/abonnementen.json\") en importeer deze hier.</string>
     <string name="import_soundcloud_instructions">Importeer een SoundCloud-profiel door de URL of het ID ervan in te voeren:
 \n
 \n1. Kies een webbrowser en schakel bureaubladmodus in (de website is niet beschikbaar voor mobiele apparaten)
@@ -602,9 +606,9 @@
     <string name="restricted_video">Deze video heeft een leeftijdsbeperking.
 \n
 \nSchakel \"%1$s\" in bij de instellingen als u die wilt zien.</string>
-    <string name="youtube_restricted_mode_enabled_summary">YouTube biedt een \"beperkte modes\" aan, dit verbergt mogelijk materiaal voor volwassenen.</string>
+    <string name="youtube_restricted_mode_enabled_summary">YouTube biedt een \"beperkte modes\" aan, dit verbergt mogelijk materiaal voor volwassenen</string>
     <string name="youtube_restricted_mode_enabled_title">YouTube \"beperkte modus\" aanzetten</string>
-    <string name="show_age_restricted_content_summary">Toon inhoud die mogelijk niet geschikt is voor kinderen omwille van een leeftijdslimiet (zoals 18+).</string>
+    <string name="show_age_restricted_content_summary">Toon inhoud die mogelijk niet geschikt is voor kinderen omwille van een leeftijdslimiet (zoals 18+)</string>
     <string name="settings_category_notification_title">Melding</string>
     <string name="peertube_instance_add_exists">Kanaal bestaat al</string>
     <string name="peertube_instance_add_https_only">Alleen HTTPS URL\'s worden ondersteund</string>
@@ -640,4 +644,14 @@
     <string name="notification_scale_to_square_image_title">Schaal miniatuurafbeelding naar verhouding 1:1</string>
     <string name="download_choose_new_path">Wijzig de download mappen</string>
     <string name="show_original_time_ago_title">Toon oorspronkelijke tijd geleden op items</string>
+    <string name="notification_colorize_summary">Laat Android de kleur van de notificatie aanpassen, op basis van de meest voorkomende kleur in de thumbnail (let op: niet beschikbaar op elk apparaat)</string>
+    <string name="notification_colorize_title">Notificatie kleur aanpassen</string>
+    <string name="recent">Recent</string>
+    <string name="show_thumbnail_summary">Gebruik miniatuur voor de achtergrond en meldingen op vergrendeld scherm</string>
+    <string name="show_thumbnail_title">Toon miniatuur</string>
+    <string name="msg_calculating_hash">Hash aan het berekenen</string>
+    <string name="hash_channel_description">Meldingen van vooruitgang video hashing</string>
+    <string name="hash_channel_name">Video Hash Melding</string>
+    <string name="show_meta_info_summary">Zet uit om metadata pop-ups te verbergen met extra informatie over de stream auteur, stream inhoud of een zoekaanvraag.</string>
+    <string name="show_meta_info_title">Toon metadata</string>
 </resources>
