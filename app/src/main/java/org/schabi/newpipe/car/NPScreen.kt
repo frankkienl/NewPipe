@@ -3,22 +3,22 @@ package org.schabi.newpipe.car
 import android.content.Context
 import android.media.AudioManager
 import android.view.KeyEvent
-import com.google.android.libraries.car.app.CarContext
-import com.google.android.libraries.car.app.Screen
-import com.google.android.libraries.car.app.model.Action
-import com.google.android.libraries.car.app.model.ActionStrip
-import com.google.android.libraries.car.app.model.CarColor
-import com.google.android.libraries.car.app.model.Template
-import com.google.android.libraries.car.app.navigation.model.NavigationTemplate
+import androidx.car.app.CarContext
+import androidx.car.app.Screen
+import androidx.car.app.model.Action
+import androidx.car.app.model.ActionStrip
+import androidx.car.app.model.CarColor
+import androidx.car.app.model.Template
+import androidx.car.app.navigation.model.NavigationTemplate
 
 class NPScreen(carContext: CarContext) : Screen(carContext) {
-    override fun getTemplate(): Template {
-        val builder = NavigationTemplate.builder()
+    override fun onGetTemplate(): Template {
+        val builder = NavigationTemplate.Builder()
         builder.setBackgroundColor(CarColor.RED)
         builder.setActionStrip(
-            ActionStrip.builder()
+            ActionStrip.Builder()
                 .addAction(
-                    Action.builder()
+                    Action.Builder()
                         .setTitle("Play/pause")
                         .setOnClickListener {
                             clickedPlayPause()

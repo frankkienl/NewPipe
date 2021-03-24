@@ -2,24 +2,23 @@ package org.schabi.newpipe.car
 
 import android.graphics.Rect
 import android.view.Surface
+import androidx.car.app.AppManager
+import androidx.car.app.CarContext
+import androidx.car.app.SurfaceCallback
+import androidx.car.app.SurfaceContainer
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.google.android.libraries.car.app.AppManager
-import com.google.android.libraries.car.app.CarContext
-import com.google.android.libraries.car.app.SurfaceContainer
-import com.google.android.libraries.car.app.SurfaceListener
-import java.util.*
 
 class NPSurface(val carContext: CarContext, lifecycle: Lifecycle) {
 
     private val myLifecycleObserver = object : DefaultLifecycleObserver {
         override fun onCreate(owner: LifecycleOwner) {
-            carContext.getCarService(AppManager::class.java).setSurfaceListener(mySurfaceListener)
+            carContext.getCarService(AppManager::class.java).setSurfaceCallback(mySurfaceCallback)
         }
     }
 
-    val mySurfaceListener = object : SurfaceListener {
+    val mySurfaceCallback = object : SurfaceCallback {
         override fun onSurfaceAvailable(surfaceContainer: SurfaceContainer) {
             surface = surfaceContainer.surface
         }

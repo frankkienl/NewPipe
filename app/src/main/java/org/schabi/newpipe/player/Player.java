@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -83,6 +84,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import org.schabi.newpipe.DownloaderImpl;
 import org.schabi.newpipe.MainActivity;
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.car.NPSurface;
 import org.schabi.newpipe.databinding.PlayerBinding;
 import org.schabi.newpipe.databinding.PlayerPopupCloseOverlayBinding;
 import org.schabi.newpipe.extractor.MediaFormat;
@@ -248,13 +250,18 @@ public final class Player implements
     private PlayQueueAdapter playQueueAdapter;
     private StreamSegmentAdapter segmentAdapter;
 
-    @Nullable private MediaSourceManager playQueueManager;
+    @Nullable
+    private MediaSourceManager playQueueManager;
 
-    @Nullable private PlayQueueItem currentItem;
-    @Nullable private MediaSourceTag currentMetadata;
-    @Nullable private Bitmap currentThumbnail;
+    @Nullable
+    private PlayQueueItem currentItem;
+    @Nullable
+    private MediaSourceTag currentMetadata;
+    @Nullable
+    private Bitmap currentThumbnail;
 
-    @Nullable private Toast errorToast;
+    @Nullable
+    private Toast errorToast;
 
     /*//////////////////////////////////////////////////////////////////////////
     // Player
@@ -264,12 +271,17 @@ public final class Player implements
     private AudioReactor audioReactor;
     private MediaSessionManager mediaSessionManager;
 
-    @NonNull private final CustomTrackSelector trackSelector;
-    @NonNull private final LoadController loadController;
-    @NonNull private final RenderersFactory renderFactory;
+    @NonNull
+    private final CustomTrackSelector trackSelector;
+    @NonNull
+    private final LoadController loadController;
+    @NonNull
+    private final RenderersFactory renderFactory;
 
-    @NonNull private final VideoPlaybackResolver videoResolver;
-    @NonNull private final AudioPlaybackResolver audioResolver;
+    @NonNull
+    private final VideoPlaybackResolver videoResolver;
+    @NonNull
+    private final AudioPlaybackResolver audioResolver;
 
     private final MainPlayer service; //TODO try to remove and replace everything with context
 
@@ -339,8 +351,10 @@ public final class Player implements
     public static final int ONGOING_PLAYBACK_WINDOW_FLAGS = IDLE_WINDOW_FLAGS
             | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
 
-    @Nullable private WindowManager.LayoutParams popupLayoutParams; // null if player is not popup
-    @Nullable private final WindowManager windowManager;
+    @Nullable
+    private WindowManager.LayoutParams popupLayoutParams; // null if player is not popup
+    @Nullable
+    private final WindowManager windowManager;
 
     /*//////////////////////////////////////////////////////////////////////////
     // Gestures
@@ -361,16 +375,21 @@ public final class Player implements
     private PlayerEventListener activityListener;
     private ContentObserver settingsContentObserver;
 
-    @NonNull private final SerialDisposable progressUpdateDisposable = new SerialDisposable();
-    @NonNull private final CompositeDisposable databaseUpdateDisposable = new CompositeDisposable();
+    @NonNull
+    private final SerialDisposable progressUpdateDisposable = new SerialDisposable();
+    @NonNull
+    private final CompositeDisposable databaseUpdateDisposable = new CompositeDisposable();
 
     /*//////////////////////////////////////////////////////////////////////////
     // Utils
     //////////////////////////////////////////////////////////////////////////*/
 
-    @NonNull private final Context context;
-    @NonNull private final SharedPreferences prefs;
-    @NonNull private final HistoryRecordManager recordManager;
+    @NonNull
+    private final Context context;
+    @NonNull
+    private final SharedPreferences prefs;
+    @NonNull
+    private final HistoryRecordManager recordManager;
 
 
 
@@ -482,7 +501,12 @@ public final class Player implements
         registerBroadcastReceiver();
 
         // Setup video view
-        simpleExoPlayer.setVideoSurfaceView(binding.surfaceView);
+        if (NPSurface.Companion.getSurface() != null) {
+            final Surface surface = NPSurface.Companion.getSurface();
+            simpleExoPlayer.setVideoSurface(surface);
+        } else {
+            simpleExoPlayer.setVideoSurfaceView(binding.surfaceView);
+        }
         simpleExoPlayer.addVideoListener(this);
 
         // Setup subtitle view
@@ -1376,6 +1400,7 @@ public final class Player implements
 
     /**
      * Changes the size of the popup based on the width.
+     *
      * @param width the new width, height is calculated with
      *              {@link PlayerHelper#getMinimumVideoHeight(float)}
      */
@@ -2382,6 +2407,7 @@ public final class Player implements
     // Errors
     //////////////////////////////////////////////////////////////////////////*/
     //region
+
     /**
      * Process exceptions produced by {@link com.google.android.exoplayer2.ExoPlayer ExoPlayer}.
      * <p>There are multiple types of errors:</p>
@@ -3688,11 +3714,11 @@ public final class Player implements
     private void setupScreenRotationButton() {
         binding.screenRotationButton.setVisibility(videoPlayerSelected()
                 && (globalScreenOrientationLocked(context) || isVerticalVideo
-                        || DeviceUtils.isTablet(context))
+                || DeviceUtils.isTablet(context))
                 ? View.VISIBLE : View.GONE);
         binding.screenRotationButton.setImageDrawable(AppCompatResources.getDrawable(context,
                 isFullscreen ? R.drawable.ic_fullscreen_exit_white_24dp
-                : R.drawable.ic_fullscreen_white_24dp));
+                        : R.drawable.ic_fullscreen_white_24dp));
     }
 
     private void setResizeMode(@AspectRatioFrameLayout.ResizeMode final int resizeMode) {
@@ -3917,7 +3943,8 @@ public final class Player implements
                     setRecovery();
                     NavigationHelper.playOnPopupPlayer(getParentActivity(), playQueue, true);
                     break;
-                case MINIMIZE_ON_EXIT_MODE_NONE: default:
+                case MINIMIZE_ON_EXIT_MODE_NONE:
+                default:
                     pause();
                     break;
             }

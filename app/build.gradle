@@ -101,7 +101,7 @@ ext {
     stethoVersion = '1.5.1'
     leakCanaryVersion = '2.5'
     exoPlayerVersion = '2.12.3'
-    androidxLifecycleVersion = '2.2.0'
+    androidxLifecycleVersion = '2.3.0'
     androidxRoomVersion = '2.3.0-alpha03'
     groupieVersion = '2.8.1'
     markwonVersion = '4.6.0'
@@ -210,7 +210,7 @@ dependencies {
     kapt "com.google.auto.service:auto-service:${googleAutoServiceVersion}"
 
     implementation "androidx.appcompat:appcompat:1.2.0"
-    implementation "androidx.preference:preference:1.1.1"
+    implementation "androidx.preference:preference-ktx:1.1.1"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
@@ -220,8 +220,10 @@ dependencies {
     implementation 'androidx.media:media:1.2.1'
     implementation 'androidx.webkit:webkit:1.4.0'
 
-    implementation "androidx.lifecycle:lifecycle-livedata:${androidxLifecycleVersion}"
-    implementation "androidx.lifecycle:lifecycle-viewmodel:${androidxLifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${androidxLifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${androidxLifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-common-java8:${androidxLifecycleVersion}"
+
 
     implementation "androidx.room:room-runtime:${androidxRoomVersion}"
     implementation "androidx.room:room-rxjava3:${androidxRoomVersion}"
@@ -259,7 +261,7 @@ dependencies {
     }
 
     //Android Auto
-    implementation 'com.google.android.libraries.car:car-app:1.0.0-beta.1'
+    implementation 'androidx.car.app:app:1.0.0-beta01'
 }
 
 static String getGitWorkingBranch() {
